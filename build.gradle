@@ -1,13 +1,21 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 
 repositories {
     jcenter()
     mavenLocal() // needed for voltdb-x.y.z.jar
 }
 
+group = 'uk.co.bristlecone.voltdb'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
+    compile 'com.google.guava:guava:20.0'
+    compile 'org.apache.commons:commons-lang3:3.5'
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'org.voltdb:voltdbclient:6.4'    
     compile 'org.voltdb:voltdb:6.4'
