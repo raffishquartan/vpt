@@ -22,6 +22,27 @@ public enum ProcReturnType {
     return this.javaType;
   }
 
+  /**
+   * @param type The Java type (as a String) to check
+   * @return true iff <code>type</code> can be parsed to a valid ProcReturnType, false otherwise
+   */
+  public static boolean isValidJavaType(String type) {
+    switch (type) {
+    case "long":
+      return true;
+    case "VoltTable":
+      return true;
+    case "VoltTable[]":
+      return true;
+    default:
+      return false;
+    }
+  }
+
+  /**
+   * @param type The Java type (as a String) to convert
+   * @return the ProcReturnType value corresponding to the Java type, or throws a WrapgenRuntimeException
+   */
   public static ProcReturnType parseJavaType(String type) {
     switch (type) {
     case "long":
