@@ -11,14 +11,12 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import uk.co.bristlecone.voltdb.wrapgen.maker.ProcData;
-import uk.co.bristlecone.voltdb.wrapgen.source.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 
 public class ProcDataTest {
   private final static String TEST_NAME = "testName";
-  private final static List<Parameter> TEST_PARAMETERS = new ImmutableList.Builder<Parameter>()
-      .add(Parameter.of("testType", "testName"))
-      .build();
+  private final static List<RunParameter> TEST_PARAMETERS = ImmutableList.of(RunParameter.of("testType", "testName"));
   private final static ProcReturnType TEST_RETURN_TYPE = ProcReturnType.VOLTABLE_ARRAY;
 
   @Test

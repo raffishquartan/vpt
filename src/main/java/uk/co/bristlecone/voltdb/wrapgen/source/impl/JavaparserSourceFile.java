@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.github.javaparser.ast.CompilationUnit;
 
-import uk.co.bristlecone.voltdb.wrapgen.source.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 

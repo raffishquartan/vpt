@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
 
-import uk.co.bristlecone.voltdb.wrapgen.source.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 
 /**
@@ -14,10 +14,10 @@ import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
  */
 public class ProcData {
   private String name;
-  private List<Parameter> parameters;
+  private List<RunParameter> parameters;
   private ProcReturnType returnType;
 
-  private ProcData(String name, List<Parameter> parameters, ProcReturnType returnType) {
+  private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType) {
     this.name = name;
     this.parameters = parameters;
     this.returnType = returnType;
@@ -33,7 +33,7 @@ public class ProcData {
   /**
    * @return the parameters to the stored procedure's <code>run</code> method
    */
-  public List<Parameter> parameters() {
+  public List<RunParameter> parameters() {
     return parameters;
   }
 
@@ -51,7 +51,7 @@ public class ProcData {
    */
   public static class Builder {
     private String name;
-    private List<Parameter> parameters;
+    private List<RunParameter> parameters;
     private ProcReturnType returnType;
 
     public Builder() {
@@ -65,7 +65,7 @@ public class ProcData {
       return this;
     }
 
-    public Builder setParameters(List<Parameter> parameters) {
+    public Builder setParameters(List<RunParameter> parameters) {
       checkArgument(parameters != null, "parameters must not be null");
       this.parameters = parameters;
       return this;

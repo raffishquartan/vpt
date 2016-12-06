@@ -7,26 +7,27 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Represents a parameter (e.g. <code>String foo</code>) to a stored procedure
+ * Represents a parameter (e.g. <code>String foo</code>) to a stored procedure. Called RunParameter because JavaParser
+ * also has a Parameter type and the FQCN's get messy fast...
  * 
  * @author christo
  */
-public class Parameter {
+public class RunParameter {
   private String type;
   private String name;
 
-  private Parameter(String type, String name) {
+  private RunParameter(String type, String name) {
     this.type = type;
     this.name = name;
   }
 
-  public static Parameter of(String type, String name) {
+  public static RunParameter of(String type, String name) {
     checkArgument(type != null, "type parameter must not be null");
     checkArgument(name != null, "name parameter must not be null");
     checkArgument(!type.equals(""), "type parameter must not be an empty String");
     checkArgument(!name.equals(""), "name parameter must not be an empty String");
 
-    return new Parameter(type, name);
+    return new RunParameter(type, name);
   }
 
   public String type() {
@@ -53,7 +54,7 @@ public class Parameter {
     if(getClass() != other.getClass()) {
       return false;
     }
-    Parameter rhs = (Parameter) other;
+    RunParameter rhs = (RunParameter) other;
     return new EqualsBuilder().append(type, rhs.type())
         .append(name, rhs.name())
         .isEquals();
