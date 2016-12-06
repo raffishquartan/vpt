@@ -1,5 +1,7 @@
 package uk.co.bristlecone.voltdb.wrapgen.source;
 
+import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
+
 /**
  * Represents the types that may be returned by a VoltDB stored procedure's run method. See the VoltDB documentation for
  * more information: "5.2.5. Returning Results from a Stored Procedure"
@@ -7,5 +9,29 @@ package uk.co.bristlecone.voltdb.wrapgen.source;
  * @author christo
  */
 public enum ProcReturnType {
-  LONG_PRIMITIVE, SINGLE_VOLTTABLE, VOLTABLE_ARRAY
+  LONG_PRIMITIVE("long"), SINGLE_VOLTTABLE("VoltTable"), VOLTABLE_ARRAY("VoltTable[]");
+
+  private final String javaType;
+
+  ProcReturnType(String javaType) {
+    this.javaType = javaType;
+  }
+
+  @Override
+  public String toString() {
+    return this.javaType;
+  }
+
+  public static ProcReturnType parseJavaType(String type) {
+    switch (type) {
+    case "long":
+      return ProcReturnType.LONG_PRIMITIVE;
+    case "VoltTable":
+      return ProcReturnType.SINGLE_VOLTTABLE;
+    case "VoltTable[]":
+      return ProcReturnType.VOLTABLE_ARRAY;
+    default:
+      throw new WrapgenRuntimeException(String.format("Invalid stored procedure return type %s", type));
+    }
+  }
 }
