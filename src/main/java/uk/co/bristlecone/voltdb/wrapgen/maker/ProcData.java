@@ -4,6 +4,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
 
+import uk.co.bristlecone.voltdb.wrapgen.source.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
+
 /**
  * An immutable class representing the metadata needed to build a wrapgen runner
  * 
@@ -42,7 +45,7 @@ public class ProcData {
   }
 
   /**
-   * Allows clear, type-safe building of a ProcMetaData
+   * Allows clear, type-safe building of a ProcData
    * 
    * @author christo
    */
