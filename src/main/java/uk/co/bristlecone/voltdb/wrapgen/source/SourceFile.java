@@ -29,7 +29,7 @@ public interface SourceFile {
    * @return the parameters to the VoltDB stored procedure's run method; may throw a {@link WrapgenRuntimeException} if
    *         the associated Java source does not contain a valid VoltDB stored procedure
    */
-  List<Parameter> runMethodParameters();
+  List<RunParameter> runMethodParameters();
 
   /**
    * @return the return type of the VoltDB stored procedure in this source file, may throw a

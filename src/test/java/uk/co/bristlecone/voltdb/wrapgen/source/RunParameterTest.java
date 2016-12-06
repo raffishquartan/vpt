@@ -7,49 +7,49 @@ import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
 
-import uk.co.bristlecone.voltdb.wrapgen.source.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 
-public class ParameterTest {
+public class RunParameterTest {
   private static final String PARAMETER_TYPE = "parameterType";
   private static final String PARAMETER_NAME = "parameterName";
 
   @Test
   public void nameMethodWorksCorrectly() {
-    Parameter testee = Parameter.of(PARAMETER_TYPE, PARAMETER_NAME);
+    RunParameter testee = RunParameter.of(PARAMETER_TYPE, PARAMETER_NAME);
     assertThat(testee.name(), is(equalTo(PARAMETER_NAME)));
   }
 
   @Test
   public void typeMethodWorksCorrectly() {
-    Parameter testee = Parameter.of(PARAMETER_TYPE, PARAMETER_NAME);
+    RunParameter testee = RunParameter.of(PARAMETER_TYPE, PARAMETER_NAME);
     assertThat(testee.type(), is(equalTo(PARAMETER_TYPE)));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void factoryThrowsOnNullType() {
-    Parameter.of(null, PARAMETER_NAME);
+    RunParameter.of(null, PARAMETER_NAME);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void factoryThrowsOnNullName() {
-    Parameter.of(PARAMETER_TYPE, null);
+    RunParameter.of(PARAMETER_TYPE, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void factoryThrowsOnEmptyType() {
-    Parameter.of("", PARAMETER_NAME);
+    RunParameter.of("", PARAMETER_NAME);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void factoryThrowsOnEmptyName() {
-    Parameter.of(PARAMETER_TYPE, "");
+    RunParameter.of(PARAMETER_TYPE, "");
   }
 
   @Test
   public void equalsMethodWorks() {
-    Parameter a = Parameter.of(PARAMETER_TYPE, PARAMETER_NAME);
-    Parameter b = Parameter.of(PARAMETER_TYPE, PARAMETER_NAME);
-    Parameter c = Parameter.of(PARAMETER_TYPE, "someOtherName");
+    RunParameter a = RunParameter.of(PARAMETER_TYPE, PARAMETER_NAME);
+    RunParameter b = RunParameter.of(PARAMETER_TYPE, PARAMETER_NAME);
+    RunParameter c = RunParameter.of(PARAMETER_TYPE, "someOtherName");
     assertThat(a, is(equalTo(b)));
     assertThat(a, is(not(equalTo(c))));
   }
