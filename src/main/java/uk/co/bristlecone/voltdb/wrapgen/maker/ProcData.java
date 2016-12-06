@@ -6,6 +6,7 @@ import java.util.List;
 
 import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
+import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 
 /**
  * An immutable class representing the metadata needed to build a wrapgen runner
@@ -21,6 +22,12 @@ public class ProcData {
     this.name = name;
     this.parameters = parameters;
     this.returnType = returnType;
+  }
+
+  private ProcData(SourceFile source) {
+    this.name = source.voltProcedureName();
+    this.parameters = source.runMethodParameters();
+    this.returnType = source.runMethodReturnType();
   }
 
   /**
