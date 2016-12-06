@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.runner.proc;
+package uk.co.bristlecone.voltdb.wrapgen.maker;
 
 /**
  * Represents the types that may be returned by a VoltDB stored procedure's run method. See the VoltDB documentation for

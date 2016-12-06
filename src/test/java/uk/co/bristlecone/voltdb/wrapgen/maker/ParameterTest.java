@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.runner.proc;
+package uk.co.bristlecone.voltdb.wrapgen.maker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
+
+import uk.co.bristlecone.voltdb.wrapgen.maker.Parameter;
 
 public class ParameterTest {
   private static final String PARAMETER_TYPE = "parameterType";
