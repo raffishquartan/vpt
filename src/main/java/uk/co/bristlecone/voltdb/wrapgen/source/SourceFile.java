@@ -20,20 +20,22 @@ public interface SourceFile {
   boolean isValidVoltProcedure();
 
   /**
-   * @return the name of the VoltDB stored procedure in this source file; may throw a {@link WrapgenRuntimeException} if
-   *         the associated Java source does not contain a valid VoltDB stored procedure
+   * @return the name of the VoltDB stored procedure in this source file; does not return an Optional but throws a
+   *         {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
+   *         procedure
    */
   String voltProcedureName();
 
   /**
-   * @return the parameters to the VoltDB stored procedure's run method; may throw a {@link WrapgenRuntimeException} if
-   *         the associated Java source does not contain a valid VoltDB stored procedure
+   * @return the parameters to the VoltDB stored procedure's run method; does not return an Optional but throws a
+   *         {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
+   *         procedure
    */
   List<RunParameter> runMethodParameters();
 
   /**
-   * @return the return type of the VoltDB stored procedure in this source file, may throw a
-   *         {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
+   * @return the return type of the VoltDB stored procedure in this source file, does not return an Optional but throws
+   *         a {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
    *         procedure
    */
   ProcReturnType runMethodReturnType();
