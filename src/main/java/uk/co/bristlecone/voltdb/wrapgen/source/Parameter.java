@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.maker;
+package uk.co.bristlecone.voltdb.wrapgen.source;
 
 import static com.google.common.base.Preconditions.checkArgument;
 

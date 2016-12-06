@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import uk.co.bristlecone.voltdb.wrapgen.maker.Parameter;
 import uk.co.bristlecone.voltdb.wrapgen.maker.ProcData;
-import uk.co.bristlecone.voltdb.wrapgen.maker.ProcReturnType;
+import uk.co.bristlecone.voltdb.wrapgen.source.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 
 public class ProcDataTest {
   private final static String TEST_NAME = "testName";
