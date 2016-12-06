@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.runner.proc;
+package uk.co.bristlecone.voltdb.wrapgen.maker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -9,6 +9,10 @@ import java.util.List;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
+
+import uk.co.bristlecone.voltdb.wrapgen.maker.Parameter;
+import uk.co.bristlecone.voltdb.wrapgen.maker.ProcData;
+import uk.co.bristlecone.voltdb.wrapgen.maker.ProcReturnType;
 
 public class ProcDataTest {
   private final static String TEST_NAME = "testName";
