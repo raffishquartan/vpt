@@ -37,7 +37,25 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public boolean isValidVoltProcedure() {
-    throw new WrapgenRuntimeException("Error NYI");
+    Optional<ClassOrInterfaceDeclaration> storedProc = getClassExtendingVoltProcedure();
+    Optional<MethodDeclaration> runMethod = getRunMethod();
+
+    if(!storedProc.isPresent()) {
+      return false;
+    }
+
+    if(!runMethod.isPresent()) {
+      return false;
+    }
+
+    Optional<String> returnType = getRunMethodReturnTypeAsString();
+    if(!returnType.isPresent() || !ProcReturnType.isValidJavaType(getRunMethodReturnTypeAsString().get())) {
+      return false;
+    }
+
+    // TODO - checks to do, e.g. throws the wrong type of chcekced exception
+
+    return true;
   }
 
   /*
@@ -75,11 +93,17 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public ProcReturnType runMethodReturnType() {
-    return getRunMethod().map(m -> m.getElementType())
-        .map(e -> e.toString(new PrettyPrinterConfiguration().setPrintComments(false)))
-        .map(ProcReturnType::parseJavaType)
+    return getRunMethodReturnTypeAsString().map(ProcReturnType::parseJavaType)
         .orElseThrow(() -> new WrapgenRuntimeException(
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
+  }
+
+  /**
+   * @return the <code>run</code> method's return type as Optional<String>
+   */
+  private Optional<String> getRunMethodReturnTypeAsString() {
+    return getRunMethod().map(m -> m.getElementType())
+        .map(e -> e.toString(new PrettyPrinterConfiguration().setPrintComments(false)));
   }
 
   /**
