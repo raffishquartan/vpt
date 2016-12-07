@@ -2,8 +2,8 @@ package uk.co.bristlecone.voltdb.wrapgen.source;
 
 import java.util.List;
 
-import uk.co.bristlecone.voltdb.wrapgen.VoltRunner;
 import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
+import uk.co.bristlecone.voltdb.wrapgen.runner.VoltRunner;
 
 /**
  * Represents a Java source file and provides accessor methods for extracting metadata needed to build a
