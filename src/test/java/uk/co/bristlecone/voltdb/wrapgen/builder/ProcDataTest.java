@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.maker;
+package uk.co.bristlecone.voltdb.wrapgen.builder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import uk.co.bristlecone.voltdb.wrapgen.maker.ProcData;
 import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
+import uk.co.bristlecone.voltdb.wrapgen.builder.ProcData;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 
 public class ProcDataTest {
