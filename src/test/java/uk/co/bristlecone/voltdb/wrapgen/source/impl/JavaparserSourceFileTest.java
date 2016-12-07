@@ -104,4 +104,12 @@ public class JavaparserSourceFileTest {
     JavaparserSourceFile testee = new JavaparserSourceFile(testAst, "dummy-test-ast");
     testee.runMethodReturnType();
   }
+  
+  @Test
+  public void isValidVoltProcedureWorksCorrectly() {
+    assertThat(new JavaparserSourceFile(JavaParser.parse(CLASS_VALID), "dummy-test-ast").isValidVoltProcedure(), is(equalTo(true)));
+    assertThat(new JavaparserSourceFile(JavaParser.parse(CLASS_INCORRECT_SUPERCLASS), "dummy-test-ast").isValidVoltProcedure(), is(equalTo(false)));
+    assertThat(new JavaparserSourceFile(JavaParser.parse(CLASS_NO_RUN_METHOD), "dummy-test-ast").isValidVoltProcedure(), is(equalTo(false)));
+    assertThat(new JavaparserSourceFile(JavaParser.parse(CLASS_INVALID_RUN_METHOD_RETURN_TYPE), "dummy-test-ast").isValidVoltProcedure(), is(equalTo(false)));
+  }
 }
