@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen;
+package uk.co.bristlecone.voltdb.wrapgen.runner;
 
 import java.util.concurrent.CompletableFuture;
 
