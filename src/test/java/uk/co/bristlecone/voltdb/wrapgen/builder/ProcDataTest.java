@@ -51,4 +51,9 @@ public class ProcDataTest {
   public void builderThrowsOnNullReturnType() {
     new ProcData.Builder().setReturnType(null);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void builderThrowsIfAnyFieldsAreNotSet() {
+    new ProcData.Builder().build();
+  }
 }
