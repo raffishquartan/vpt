@@ -14,10 +14,10 @@ import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
  * @author christo
  */
 public class ProcData {
-  private String name;
-  private List<RunParameter> parameters;
-  private ProcReturnType returnType;
-  private String packageName;
+  private final String name;
+  private final List<RunParameter> parameters;
+  private final ProcReturnType returnType;
+  private final String packageName;
 
   private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType, String packageName) {
     this.name = name;
