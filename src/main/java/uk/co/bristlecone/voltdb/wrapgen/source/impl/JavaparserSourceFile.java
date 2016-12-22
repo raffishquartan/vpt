@@ -98,6 +98,18 @@ public class JavaparserSourceFile implements SourceFile {
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#packageName()
+   */
+  @Override
+  public String packageName() {
+    return ast.getPackage()
+        .map(p -> p.getPackageName())
+        .orElse("");
+  }
+
   /**
    * @return the <code>run</code> method's return type as Optional<String>
    */
