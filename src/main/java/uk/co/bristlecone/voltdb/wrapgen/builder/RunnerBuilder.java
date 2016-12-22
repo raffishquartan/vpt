@@ -13,7 +13,7 @@ public class RunnerBuilder {
     this.procData = procData;
   }
 
-  public RunnerJavaSource build() {
+  public VoltRunnerJavaSource build() {
     throw new UnsupportedOperationException("NYI");
   }
 }
