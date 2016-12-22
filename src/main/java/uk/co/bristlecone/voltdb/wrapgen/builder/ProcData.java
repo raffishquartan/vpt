@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
 
-import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 
 /**
@@ -17,17 +17,20 @@ public class ProcData {
   private String name;
   private List<RunParameter> parameters;
   private ProcReturnType returnType;
+  private String packageName;
 
-  private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType) {
+  private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType, String packageName) {
     this.name = name;
     this.parameters = parameters;
     this.returnType = returnType;
+    this.packageName = packageName;
   }
 
   private ProcData(SourceFile source) {
     this.name = source.voltProcedureName();
     this.parameters = source.runMethodParameters();
     this.returnType = source.runMethodReturnType();
+    this.packageName = source.packageName();
   }
 
   /**
@@ -52,6 +55,13 @@ public class ProcData {
   }
 
   /**
+   * @return the stored procedure's package
+   */
+  public String packageName() {
+    return packageName;
+  }
+
+  /**
    * Allows clear, type-safe building of a ProcData
    * 
    * @author christo
@@ -60,6 +70,7 @@ public class ProcData {
     private String name;
     private List<RunParameter> parameters;
     private ProcReturnType returnType;
+    private String packageName;
 
     public Builder() {
       // intentionally left blank
@@ -84,8 +95,14 @@ public class ProcData {
       return this;
     }
 
+    public Builder setPackageName(String packageName) {
+      checkArgument(packageName != null, "packageName must not be null");
+      this.packageName = packageName;
+      return this;
+    }
+
     public ProcData build() {
-      return new ProcData(name, parameters, returnType);
+      return new ProcData(name, parameters, returnType, packageName);
     }
   }
 }
