@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
@@ -85,7 +87,7 @@ public class ProcData {
 
     public Builder setParameters(List<RunParameter> parameters) {
       checkArgument(parameters != null, "parameters must not be null");
-      this.parameters = parameters;
+      this.parameters = ImmutableList.copyOf(parameters);
       return this;
     }
 
