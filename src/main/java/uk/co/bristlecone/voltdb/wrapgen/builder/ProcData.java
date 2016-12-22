@@ -79,31 +79,51 @@ public class ProcData {
     }
 
     public Builder setName(String name) {
-      checkArgument(name != null, "name must not be null");
-      checkArgument(!name.equals(""), "name must not be empty String");
+      checkName(name);
       this.name = name;
       return this;
     }
 
     public Builder setParameters(List<RunParameter> parameters) {
-      checkArgument(parameters != null, "parameters must not be null");
+      checkParameters(parameters);
       this.parameters = ImmutableList.copyOf(parameters);
       return this;
     }
 
     public Builder setReturnType(ProcReturnType returnType) {
-      checkArgument(name != null, "returnType must not be null");
+      checkReturnType(returnType);
       this.returnType = returnType;
       return this;
     }
 
     public Builder setPackageName(String packageName) {
-      checkArgument(packageName != null, "packageName must not be null");
+      checkPackageName(packageName);
       this.packageName = packageName;
       return this;
     }
 
+    private void checkName(String name) {
+      checkArgument(name != null, "name must not be null");
+      checkArgument(!name.equals(""), "name must not be empty String");
+    }
+
+    private void checkParameters(List<RunParameter> parameters) {
+      checkArgument(parameters != null, "parameters must not be null");
+    }
+
+    private void checkReturnType(ProcReturnType returnType) {
+      checkArgument(returnType != null, "returnType must not be null");
+    }
+
+    private void checkPackageName(String packageName) {
+      checkArgument(packageName != null, "packageName must not be null");
+    }
+
     public ProcData build() {
+      checkName(name);
+      checkParameters(parameters);
+      checkReturnType(returnType);
+      checkPackageName(packageName);
       return new ProcData(name, parameters, returnType, packageName);
     }
   }
