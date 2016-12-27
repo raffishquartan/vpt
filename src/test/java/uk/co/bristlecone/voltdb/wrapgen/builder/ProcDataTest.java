@@ -18,6 +18,7 @@ public class ProcDataTest {
   private final static List<RunParameter> TEST_PARAMETERS = ImmutableList.of(RunParameter.of("testType", "testName"));
   private final static ProcReturnType TEST_RETURN_TYPE = ProcReturnType.VOLTABLE_ARRAY;
   private final static String TEST_PACKAGE_NAME = "test.package";
+  private final static String TEST_CLASS_JAVADOC = "Class JavaDoc goes here";
 
   @Test
   public void builderInstantiatesClassCorrectly() {
@@ -25,11 +26,13 @@ public class ProcDataTest {
         .setParameters(TEST_PARAMETERS)
         .setReturnType(TEST_RETURN_TYPE)
         .setPackageName(TEST_PACKAGE_NAME)
+        .setClassJavaDoc(TEST_CLASS_JAVADOC)
         .build();
     assertThat(testee.name(), is(equalTo(TEST_NAME)));
     assertThat(testee.parameters(), is(equalTo(TEST_PARAMETERS)));
     assertThat(testee.returnType(), is(equalTo(TEST_RETURN_TYPE)));
     assertThat(testee.packageName(), is(equalTo(TEST_PACKAGE_NAME)));
+    assertThat(testee.classJavaDoc(), is(equalTo(TEST_CLASS_JAVADOC)));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -50,6 +53,11 @@ public class ProcDataTest {
   @Test(expected = IllegalArgumentException.class)
   public void builderThrowsOnNullReturnType() {
     new ProcData.Builder().setReturnType(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void builderThrowsOnNullClassJavaDoc() {
+    new ProcData.Builder().setClassJavaDoc(null);
   }
 
   @Test(expected = IllegalArgumentException.class)
