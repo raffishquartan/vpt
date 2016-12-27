@@ -37,4 +37,16 @@ public class RunnerBuilderServices {
     return packageNamer.apply(procPackageName());
   }
 
+  public String runnerJavaDoc() {
+    StringBuilder result = new StringBuilder();
+    result.append("An instance of this class can be used to run the <code>");
+    result.append(procName());
+    result.append("</code> VoltDB stored procedure. This stored procedure's JavaDoc is:\n\n");
+    result.append("<blockquote>");
+    result.append(procData.classJavaDoc());
+    result.append("</blockquote>\n\n");
+    result.append("<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
+    result.append("@author voltdb-wrapgen\n");
+    return result.toString();
+  }
 }
