@@ -20,12 +20,15 @@ public class ProcData {
   private final List<RunParameter> parameters;
   private final ProcReturnType returnType;
   private final String packageName;
+  private final String classJavaDoc;
 
-  private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType, String packageName) {
+  private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType, String packageName,
+      String classJavaDoc) {
     this.name = name;
     this.parameters = parameters;
     this.returnType = returnType;
     this.packageName = packageName;
+    this.classJavaDoc = classJavaDoc;
   }
 
   private ProcData(SourceFile source) {
@@ -33,6 +36,7 @@ public class ProcData {
     this.parameters = source.runMethodParameters();
     this.returnType = source.runMethodReturnType();
     this.packageName = source.packageName();
+    this.classJavaDoc = source.classJavaDoc();
   }
 
   /**
@@ -64,6 +68,13 @@ public class ProcData {
   }
 
   /**
+   * @return the JavaDoc of the stored procedure class
+   */
+  public String classJavaDoc() {
+    return classJavaDoc;
+  }
+
+  /**
    * Allows clear, type-safe building of a ProcData
    * 
    * @author christo
@@ -73,6 +84,7 @@ public class ProcData {
     private List<RunParameter> parameters;
     private ProcReturnType returnType;
     private String packageName;
+    private String classJavaDoc;
 
     public Builder() {
       // intentionally left blank
@@ -102,6 +114,12 @@ public class ProcData {
       return this;
     }
 
+    public Builder setClassJavaDoc(String classJavaDoc) {
+      checkClassJavaDoc(classJavaDoc);
+      this.classJavaDoc = classJavaDoc;
+      return this;
+    }
+
     private void checkName(String name) {
       checkArgument(name != null, "name must not be null");
       checkArgument(!name.equals(""), "name must not be empty String");
@@ -119,12 +137,17 @@ public class ProcData {
       checkArgument(packageName != null, "packageName must not be null");
     }
 
+    private void checkClassJavaDoc(String classJavaDoc) {
+      checkArgument(classJavaDoc != null, "classJavaDoc must not be null");
+    }
+
     public ProcData build() {
       checkName(name);
       checkParameters(parameters);
       checkReturnType(returnType);
       checkPackageName(packageName);
-      return new ProcData(name, parameters, returnType, packageName);
+      checkClassJavaDoc(classJavaDoc);
+      return new ProcData(name, parameters, returnType, packageName, classJavaDoc);
     }
   }
 }
