@@ -110,6 +110,18 @@ public class JavaparserSourceFile implements SourceFile {
         .orElse("");
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#classJavaDoc()
+   */
+  @Override
+  public String classJavaDoc() {
+    return getClassExtendingVoltProcedure().map(c -> c.getJavaDoc())
+        .map(j -> j.toString())
+        .orElse(SourceFile.NO_CLASS_JAVADOC_TEXT);
+  }
+
   /**
    * @return the <code>run</code> method's return type as Optional<String>
    */
