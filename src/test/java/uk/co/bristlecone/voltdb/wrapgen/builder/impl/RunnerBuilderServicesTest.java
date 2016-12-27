@@ -37,8 +37,14 @@ public class RunnerBuilderServicesTest {
   }
 
   @Test
-  public void builderPackageNameWorksCorrectly(@Mocked final ProcData mockProcData) {
-
+  public void runnerPackageNameWorksCorrectly(@Mocked final ProcData mockProcData) {
+    // @formatter:off
+    new Expectations() {{
+      mockProcData.packageName(); result = PROC_DATA_PACKAGE_NAME;
+    }};
+    // @formatter:on
+    RunnerBuilderServices testee = new RunnerBuilderServices(mockProcData, PACKAGE_NAMER, RUNNER_NAMER);
+    assertThat(testee.runnerPackageName(), is(equalTo(EXP_RUNNER_PACKAGE_NAME)));
   }
 
   @Test
@@ -53,7 +59,7 @@ public class RunnerBuilderServicesTest {
   }
 
   @Test
-  public void builderNameWorksCorrectly(@Mocked final ProcData mockProcData) {
+  public void runnerNameWorksCorrectly(@Mocked final ProcData mockProcData) {
     // @formatter:off
     new Expectations() {{
       mockProcData.name(); result = PROC_DATA_CLASS_NAME;
