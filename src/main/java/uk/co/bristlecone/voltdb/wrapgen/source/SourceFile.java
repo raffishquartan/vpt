@@ -15,6 +15,12 @@ import uk.co.bristlecone.voltdb.wrapgen.runner.VoltRunner;
  */
 public interface SourceFile {
   /**
+   * Used as placeholder text in the runner JavaDoc for the stored procedure class if there is none provided in its own
+   * class definition.
+   */
+  String NO_CLASS_JAVADOC_TEXT = "{none provided}";
+
+  /**
    * @return true iff this SourceFile contains a valid VoltDB stored procedure
    */
   boolean isValidVoltProcedure();
@@ -46,4 +52,10 @@ public interface SourceFile {
    *         source does not contain a valid VoltDB stored procedure
    */
   String packageName();
+
+  /**
+   * @return the body of the stored procedure class's JavaDoc; if none is specified it returns
+   *         {@link SourceFile#NO_CLASS_JAVADOC_TEXT} as a placeholder.
+   */
+  String classJavaDoc();
 }
