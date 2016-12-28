@@ -15,7 +15,7 @@ import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
 
 public class ProcDataTest {
   private final static String TEST_NAME = "testName";
-  private final static List<RunParameter> TEST_PARAMETERS = ImmutableList.of(RunParameter.of("testType", "testName"));
+  private final static List<RunParameter> TEST_PARAMS = ImmutableList.of(RunParameter.of("test.pkg", "AClass", "aVar"));
   private final static ProcReturnType TEST_RETURN_TYPE = ProcReturnType.VOLTABLE_ARRAY;
   private final static String TEST_PACKAGE_NAME = "test.package";
   private final static String TEST_CLASS_JAVADOC = "Class JavaDoc goes here";
@@ -23,13 +23,13 @@ public class ProcDataTest {
   @Test
   public void builderInstantiatesClassCorrectly() {
     ProcData testee = new ProcData.Builder().setName(TEST_NAME)
-        .setParameters(TEST_PARAMETERS)
+        .setParameters(TEST_PARAMS)
         .setReturnType(TEST_RETURN_TYPE)
         .setPackageName(TEST_PACKAGE_NAME)
         .setClassJavaDoc(TEST_CLASS_JAVADOC)
         .build();
     assertThat(testee.name(), is(equalTo(TEST_NAME)));
-    assertThat(testee.parameters(), is(equalTo(TEST_PARAMETERS)));
+    assertThat(testee.parameters(), is(equalTo(TEST_PARAMS)));
     assertThat(testee.returnType(), is(equalTo(TEST_RETURN_TYPE)));
     assertThat(testee.packageName(), is(equalTo(TEST_PACKAGE_NAME)));
     assertThat(testee.classJavaDoc(), is(equalTo(TEST_CLASS_JAVADOC)));
