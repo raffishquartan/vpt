@@ -16,13 +16,13 @@ public class RunParameterTest {
   @Test
   public void nameMethodWorksCorrectly() {
     RunParameter testee = RunParameter.of(PARAMETER_TYPE, PARAMETER_NAME);
-    assertThat(testee.name(), is(equalTo(PARAMETER_NAME)));
+    assertThat(testee.variableName(), is(equalTo(PARAMETER_NAME)));
   }
 
   @Test
   public void typeMethodWorksCorrectly() {
     RunParameter testee = RunParameter.of(PARAMETER_TYPE, PARAMETER_NAME);
-    assertThat(testee.type(), is(equalTo(PARAMETER_TYPE)));
+    assertThat(testee.typeName(), is(equalTo(PARAMETER_TYPE)));
   }
 
   @Test(expected = IllegalArgumentException.class)
