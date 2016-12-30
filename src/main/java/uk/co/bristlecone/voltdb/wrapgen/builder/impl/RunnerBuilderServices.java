@@ -1,6 +1,10 @@
 package uk.co.bristlecone.voltdb.wrapgen.builder.impl;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.TypeName;
 
 import uk.co.bristlecone.voltdb.wrapgen.builder.ProcData;
 
@@ -48,5 +52,27 @@ public class RunnerBuilderServices {
     result.append("<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
     result.append("@author voltdb-wrapgen\n");
     return result.toString();
+  }
+
+  /**
+   * @return the parameters to the stored procedure's run method, converting them from RunParameter's to ParameterSpec's
+   */
+  public Iterable<ParameterSpec> runMethodParamsAsParameterSpecs() {
+    return procData.parameters()
+        .stream()
+        .map(rp -> ParameterSpec.builder(TypeName.BYTE, "foo"))
+        // .map(rp -> ParameterSpec.builder(ClassName.get(rp.packageName(), rp.typeName()), rp.variableName()))
+        .map(psb -> psb.build())
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * @return the parameters to the stored procedure's run method as a comma-separated list of variable names
+   */
+  public String runMethodParamsAsVariableList() {
+    return procData.parameters()
+        .stream()
+        .map(rp -> rp.variableName())
+        .collect(Collectors.joining(", "));
   }
 }
