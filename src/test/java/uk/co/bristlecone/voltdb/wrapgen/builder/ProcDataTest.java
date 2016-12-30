@@ -12,10 +12,12 @@ import com.google.common.collect.ImmutableList;
 
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterClass;
 
 public class ProcDataTest {
   private final static String TEST_NAME = "testName";
-  private final static List<RunParameter> TEST_PARAMS = ImmutableList.of(RunParameter.of("test.pkg", "AClass", "aVar"));
+  private final static List<RunParameter> TEST_PARAMS = ImmutableList
+      .of(RunParameterClass.of("test.pkg", "AClass", "aVar"));
   private final static ProcReturnType TEST_RETURN_TYPE = ProcReturnType.VOLTABLE_ARRAY;
   private final static String TEST_PACKAGE_NAME = "test.package";
   private final static String TEST_CLASS_JAVADOC = "Class JavaDoc goes here";
