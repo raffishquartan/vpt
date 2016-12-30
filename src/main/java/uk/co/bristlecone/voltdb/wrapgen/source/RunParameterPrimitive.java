@@ -68,10 +68,12 @@ public class RunParameterPrimitive implements RunParameter {
     return true;
   }
 
+  @Override
   public String typeName() {
     return typeName;
   }
 
+  @Override
   public String variableName() {
     return variableName;
   }
