@@ -43,10 +43,12 @@ public class RunParameterClass implements RunParameter {
     return packageName;
   }
 
+  @Override
   public String typeName() {
     return typeName;
   }
 
+  @Override
   public String variableName() {
     return variableName;
   }

@@ -13,4 +13,14 @@ public interface RunParameter {
    * @return true iff the parameter is of primitive type, false otherwise
    */
   boolean isPrimitive();
+
+  /**
+   * @return the type of the parameter, as a String, e.g. "String", "int"
+   */
+  public String typeName();
+
+  /**
+   * @return the name of the variable, as a String, e.g. "foo", "aParameter", "i"
+   */
+  public String variableName();
 }
