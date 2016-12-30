@@ -16,38 +16,38 @@ public class RunParameterPrimitive implements RunParameter {
   private String variableName;
 
   public static RunParameterPrimitive ofBoolean(String variableName) {
-    return ofPrimitive("boolean", variableName);
+    return of("boolean", variableName);
   }
 
   public static RunParameterPrimitive ofByte(String variableName) {
-    return ofPrimitive("byte", variableName);
+    return of("byte", variableName);
   }
 
   public static RunParameterPrimitive ofShort(String variableName) {
-    return ofPrimitive("short", variableName);
+    return of("short", variableName);
   }
 
   public static RunParameterPrimitive ofInt(String variableName) {
-    return ofPrimitive("int", variableName);
+    return of("int", variableName);
   }
 
   public static RunParameterPrimitive ofLong(String variableName) {
-    return ofPrimitive("long", variableName);
+    return of("long", variableName);
   }
 
   public static RunParameterPrimitive ofChar(String variableName) {
-    return ofPrimitive("char", variableName);
+    return of("char", variableName);
   }
 
   public static RunParameterPrimitive ofFloat(String variableName) {
-    return ofPrimitive("float", variableName);
+    return of("float", variableName);
   }
 
   public static RunParameterPrimitive ofDouble(String variableName) {
-    return ofPrimitive("double", variableName);
+    return of("double", variableName);
   }
 
-  private static RunParameterPrimitive ofPrimitive(String primitiveType, String variableName) {
+  public static RunParameterPrimitive of(String primitiveType, String variableName) {
     checkArgument(primitiveType != null, "primitiveType parameter must not be null");
     checkArgument(variableName != null, "variableName parameter must not be null");
     checkArgument(!primitiveType.equals(""), "primitiveType parameter must not be an empty String");
