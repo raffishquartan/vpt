@@ -1,6 +1,7 @@
 package uk.co.bristlecone.voltdb.wrapgen.source.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -16,11 +17,14 @@ import com.google.common.collect.ImmutableList;
 import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterClass;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterPrimitive;
 
 public class JavaparserSourceFileTest {
   private static final String ARB_EXP_VOLT_PROCEDURE_NAME = "ExpectedProcedureName";
   private static final ProcReturnType ARB_EXP_RUN_RETURN_TYPE = ProcReturnType.SINGLE_VOLTTABLE;
-  private static final List<RunParameter> ARB_EXP_PARAM_LIST = ImmutableList.of(RunParameter.of("Type", "varname"));
+  private static final List<RunParameter> ARB_EXP_PARAM_LIST = ImmutableList
+      .of(RunParameterPrimitive.ofInt("somePrimitiveInt"), RunParameterClass.of("java.lang", "String", "someString"));
   private static final String ARB_EXP_PACKAGE_NAME = "ExpectedPackageName";
 
   // @formatter:off
@@ -28,9 +32,7 @@ public class JavaparserSourceFileTest {
       + String.format("package %s;", ARB_EXP_PACKAGE_NAME)
       + String.format("public class %s extends VoltProcedure {", ARB_EXP_VOLT_PROCEDURE_NAME)
       + String.format("  public %s run(%s) {", ARB_EXP_RUN_RETURN_TYPE.toString(), ARB_EXP_PARAM_LIST.stream()
-          .map(rp -> {
-            return String.format("%s %s", rp.type(), rp.name());
-          })
+          .map(rp -> String.format("%s %s", rp.typeName(), rp.variableName()))
           .collect(Collectors.joining(", ")))
       + String.format("  }") 
       + String.format("}");
@@ -38,9 +40,7 @@ public class JavaparserSourceFileTest {
   private static final String CLASS_VALID_DEFAULT_PACKAGE = ""
       + String.format("public class %s extends VoltProcedure {", ARB_EXP_VOLT_PROCEDURE_NAME)
       + String.format("  public %s run(%s) {", ARB_EXP_RUN_RETURN_TYPE.toString(), ARB_EXP_PARAM_LIST.stream()
-          .map(rp -> {
-            return String.format("%s %s", rp.type(), rp.name());
-          })
+          .map(rp -> String.format("%s %s", rp.typeName(), rp.variableName()))
           .collect(Collectors.joining(", ")))
       + String.format("  }") 
       + String.format("}");
@@ -49,9 +49,7 @@ public class JavaparserSourceFileTest {
       + String.format("package %s;", ARB_EXP_PACKAGE_NAME)
       + String.format("public class %s extends WrongSuperClass {", ARB_EXP_VOLT_PROCEDURE_NAME)
       + String.format("  public %s run(%s) {", ARB_EXP_RUN_RETURN_TYPE.toString(), ARB_EXP_PARAM_LIST.stream()
-          .map(rp -> {
-            return String.format("%s %s", rp.type(), rp.name());
-          })
+          .map(rp -> String.format("%s %s", rp.typeName(), rp.variableName()))
           .collect(Collectors.joining(", ")))
       + String.format("  }") 
       + String.format("}");
@@ -60,9 +58,7 @@ public class JavaparserSourceFileTest {
       + String.format("package %s;", ARB_EXP_PACKAGE_NAME)
       + String.format("public class %s extends VoltProcedure {", ARB_EXP_VOLT_PROCEDURE_NAME)
       + String.format("  public %s invalidRun(%s) {", ARB_EXP_RUN_RETURN_TYPE.toString(), ARB_EXP_PARAM_LIST.stream()
-          .map(rp -> {
-            return String.format("%s %s", rp.type(), rp.name());
-          })
+          .map(rp -> String.format("%s %s", rp.typeName(), rp.variableName()))
           .collect(Collectors.joining(", ")))
       + String.format("  }") 
       + String.format("}");
@@ -71,9 +67,7 @@ public class JavaparserSourceFileTest {
       + String.format("package %s;", ARB_EXP_PACKAGE_NAME)
       + String.format("public class %s extends VoltProcedure {", ARB_EXP_VOLT_PROCEDURE_NAME)
       + String.format("  public InvalidReturnType run(%s) {", ARB_EXP_PARAM_LIST.stream()
-          .map(rp -> {
-            return String.format("%s %s", rp.type(), rp.name());
-          })
+          .map(rp -> String.format("%s %s", rp.typeName(), rp.variableName()))
           .collect(Collectors.joining(", ")))
       + String.format("  }") 
       + String.format("}");
@@ -89,7 +83,7 @@ public class JavaparserSourceFileTest {
   public void runMethodParametersWorksCorrectly() {
     CompilationUnit testAst = JavaParser.parse(CLASS_VALID);
     JavaparserSourceFile testee = new JavaparserSourceFile(testAst, "dummy-test-ast");
-    assertThat(testee.runMethodParameters(), is(equalTo(ARB_EXP_PARAM_LIST)));
+    assertThat(testee.runMethodParameters(), containsInAnyOrder(ARB_EXP_PARAM_LIST.toArray(new RunParameter[] {})));
   }
 
   @Test
