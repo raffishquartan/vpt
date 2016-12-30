@@ -9,10 +9,14 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.common.collect.ImmutableList;
+
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
 import uk.co.bristlecone.voltdb.wrapgen.builder.ProcData;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterClass;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterPrimitive;
 
 @RunWith(JMockit.class)
 public class RunnerBuilderServicesTest {
@@ -91,5 +95,17 @@ public class RunnerBuilderServicesTest {
     // @formatter:on
     RunnerBuilderServices testee = new RunnerBuilderServices(mockProcData, PACKAGE_NAMER, RUNNER_NAMER);
     assertThat(testee.runnerJavaDoc(), is(equalTo(EXP_RUNNER_CLASS_JAVADOC)));
+  }
+
+  @Test
+  public void runMethodParamsAsVariableListWorksCorrectly(@Mocked final ProcData mockProcData) {
+    // @formatter:off
+    new Expectations() {{
+        mockProcData.parameters(); result = ImmutableList.of(RunParameterClass.of("java.util", "Date", "someDate"), 
+            RunParameterPrimitive.ofInt("someInt"));
+    }};
+    // @formatter:on
+    RunnerBuilderServices testee = new RunnerBuilderServices(mockProcData, PACKAGE_NAMER, RUNNER_NAMER);
+    assertThat(testee.runMethodParamsAsVariableList(), is(equalTo("someDate, someInt")));
   }
 }
