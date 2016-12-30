@@ -9,11 +9,15 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.source.ProcReturnType;
 import uk.co.bristlecone.voltdb.wrapgen.source.RunParameter;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterClass;
+import uk.co.bristlecone.voltdb.wrapgen.source.RunParameterPrimitive;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 
 /**
@@ -66,7 +70,6 @@ public class JavaparserSourceFile implements SourceFile {
   @Override
   public String voltProcedureName() {
     return getClassExtendingVoltProcedure().map(c -> c.getName())
-        .map(sn -> sn.getIdentifier())
         .orElseThrow(
             () -> new WrapgenRuntimeException(String.format("No VoltProcedure-extending type found in %s", filepath)));
   }
@@ -80,7 +83,7 @@ public class JavaparserSourceFile implements SourceFile {
   public List<RunParameter> runMethodParameters() {
     return getRunMethod().map(m -> m.getParameters())
         .map(pl -> pl.stream()
-            .map(p -> RunParameter.of(javaparserParameterToType(p), javaparserParameterToName(p))))
+            .map(JavaparserSourceFile::mapParam))
         .map(s -> s.collect(Collectors.toList()))
         .orElseThrow(() -> new WrapgenRuntimeException(
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
@@ -105,7 +108,7 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public String packageName() {
-    return ast.getPackage()
+    return Optional.ofNullable(ast.getPackage())
         .map(p -> p.getPackageName())
         .orElse("");
   }
@@ -126,8 +129,8 @@ public class JavaparserSourceFile implements SourceFile {
    * @return the <code>run</code> method's return type as Optional<String>
    */
   private Optional<String> getRunMethodReturnTypeAsString() {
-    return getRunMethod().map(m -> m.getElementType())
-        .map(e -> e.toString(new PrettyPrinterConfiguration().setPrintComments(false)));
+    return getRunMethod().map(m -> m.getType())
+        .map(t -> t.toString());
   }
 
   /**
@@ -157,10 +160,46 @@ public class JavaparserSourceFile implements SourceFile {
   }
 
   /**
+   * @return a RunParameter instance representing the JavaParser {@link com.github.javaparser.ast.body.Parameter} p.
+   */
+  private static RunParameter mapParam(Parameter p) {
+    switch (parameterToTypeNameAsString(p)) {
+    case "boolean":
+    case "byte":
+    case "short":
+    case "int":
+    case "long":
+    case "char":
+    case "float":
+    case "double":
+      return RunParameterPrimitive.of(parameterToTypeNameAsString(p), parameterToVariableNameAsString(p));
+    default:
+      return RunParameterClass.of(parameterToPackageNameAsString(p), parameterToTypeNameAsString(p),
+          parameterToVariableNameAsString(p));
+    }
+  }
+
+  /**
    * @param param a JavaParser Parameter
    * @return the type of <code>param</code>, as a String
    */
-  private static String javaparserParameterToType(Parameter param) {
+  private static String parameterToPackageNameAsString(Parameter param) {
+    CombinedTypeSolver cts = new CombinedTypeSolver();
+    cts.add(new JreTypeSolver());
+    JavaParserFacade jpf = JavaParserFacade.get(cts);
+    String fqcn = jpf.getType(param, false)
+        .asReferenceType()
+        .getTypeDeclaration()
+        .asClass()
+        .getQualifiedName();
+    return fqcn.substring(0, fqcn.lastIndexOf("."));
+  }
+
+  /**
+   * @param param a JavaParser Parameter
+   * @return the type of <code>param</code>, as a String
+   */
+  private static String parameterToTypeNameAsString(Parameter param) {
     return param.getType()
         .toString();
   }
@@ -169,7 +208,7 @@ public class JavaparserSourceFile implements SourceFile {
    * @param param a JavaParser Parameter
    * @return the variable name of <code>param</code>, as a String
    */
-  private static String javaparserParameterToName(Parameter param) {
-    return param.getNameAsString();
+  private static String parameterToVariableNameAsString(Parameter param) {
+    return param.getName();
   }
 }
