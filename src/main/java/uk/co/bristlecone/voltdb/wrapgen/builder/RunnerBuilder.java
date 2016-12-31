@@ -36,7 +36,24 @@ public class RunnerBuilder {
   }
 
   public VoltRunnerJavaSource build() {
-    final MethodSpec runMethod = MethodSpec.methodBuilder("run")
+    final TypeSpec runnerClassBuilder = TypeSpec.classBuilder(rbs.runnerName())
+        .addModifiers(Modifier.PUBLIC)
+        .addAnnotation(VoltRunner.class)
+        .addJavadoc(rbs.runnerJavaDoc())
+        .addMethod(buildRunMethodSpec())
+        .addMethod(buildRunWithTimeoutMethodSpec())
+        .build();
+    final JavaFile fileBuilder = JavaFile.builder(rbs.runnerPackageName(), runnerClassBuilder)
+        .build();
+    return new VoltRunnerJavaSource(fileBuilder.toString());
+  }
+
+  private static TypeName runnerRunReturnType() {
+    return ParameterizedTypeName.get(CompletableFuture.class, ClientResponse.class);
+  }
+
+  private MethodSpec buildRunMethodSpec() {
+    return MethodSpec.methodBuilder("run")
         .addParameter(Client.class, "client", Modifier.FINAL)
         .addParameters(rbs.runMethodParamsAsParameterSpecs())
         .addException(NoConnectionsException.class)
@@ -47,20 +64,6 @@ public class RunnerBuilder {
         .addStatement("client.callProcedure($L)", callProcedureParamsAsVariableList())
         .addStatement("return result")
         .build();
-    final TypeSpec runnerClassBuilder = TypeSpec.classBuilder(rbs.runnerName())
-        .addModifiers(Modifier.PUBLIC)
-        .addAnnotation(VoltRunner.class)
-        .addJavadoc(rbs.runnerJavaDoc())
-        .addMethod(runMethod)
-        .addMethod(buildRunWithTimeoutMethodSpec())
-        .build();
-    final JavaFile fileBuilder = JavaFile.builder(rbs.runnerPackageName(), runnerClassBuilder)
-        .build();
-    return new VoltRunnerJavaSource(fileBuilder.toString());
-  }
-
-  private static TypeName runnerRunReturnType() {
-    return ParameterizedTypeName.get(CompletableFuture.class, ClientResponse.class);
   }
 
   private MethodSpec buildRunWithTimeoutMethodSpec() {
