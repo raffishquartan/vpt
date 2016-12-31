@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import javax.lang.model.element.Modifier;
 
+import org.voltdb.client.Client;
 import org.voltdb.client.ClientResponse;
 import org.voltdb.client.NoConnectionsException;
 import org.voltdb.client.ProcedureCallback;
@@ -38,6 +39,7 @@ public class RunnerBuilder {
     final String callProcedureParamsAsVariableList = String.format("handler, \"%s\", %s", rbs.procName(),
         rbs.runMethodParamsAsVariableList());
     final MethodSpec runMethod = MethodSpec.methodBuilder("run")
+        .addParameter(Client.class, "client", Modifier.FINAL)
         .addParameters(rbs.runMethodParamsAsParameterSpecs())
         .addException(NoConnectionsException.class)
         .addException(IOException.class)
