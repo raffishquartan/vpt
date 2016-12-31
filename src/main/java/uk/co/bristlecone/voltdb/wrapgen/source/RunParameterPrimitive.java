@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
+
 /**
  * Represents a primitive parameter (e.g. <code>int foo</code>) to a stored procedure.
  * 
@@ -71,6 +73,29 @@ public class RunParameterPrimitive implements RunParameter {
   @Override
   public String typeName() {
     return typeName;
+  }
+
+  public Class<?> typeClass() {
+    switch (typeName()) {
+    case "boolean":
+      return boolean.class;
+    case "byte":
+      return byte.class;
+    case "short":
+      return short.class;
+    case "int":
+      return int.class;
+    case "long":
+      return long.class;
+    case "char":
+      return char.class;
+    case "float":
+      return float.class;
+    case "double":
+      return double.class;
+    default:
+      throw new WrapgenRuntimeException(String.format("Unknown type in RunParameterPrimitive: %s", typeName()));
+    }
   }
 
   @Override
