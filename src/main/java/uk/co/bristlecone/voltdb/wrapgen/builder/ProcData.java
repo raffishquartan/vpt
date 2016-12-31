@@ -12,7 +12,7 @@ import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 
 /**
  * An immutable class representing the metadata needed to build a wrapgen runner
- * 
+ *
  * @author christo
  */
 public class ProcData {
@@ -22,8 +22,8 @@ public class ProcData {
   private final String packageName;
   private final String classJavaDoc;
 
-  private ProcData(String name, List<RunParameter> parameters, ProcReturnType returnType, String packageName,
-      String classJavaDoc) {
+  private ProcData(final String name, final List<RunParameter> parameters, final ProcReturnType returnType,
+      final String packageName, final String classJavaDoc) {
     this.name = name;
     this.parameters = parameters;
     this.returnType = returnType;
@@ -31,12 +31,12 @@ public class ProcData {
     this.classJavaDoc = classJavaDoc;
   }
 
-  private ProcData(SourceFile source) {
-    this.name = source.voltProcedureName();
-    this.parameters = source.runMethodParameters();
-    this.returnType = source.runMethodReturnType();
-    this.packageName = source.packageName();
-    this.classJavaDoc = source.classJavaDoc();
+  private ProcData(final SourceFile source) {
+    name = source.voltProcedureName();
+    parameters = source.runMethodParameters();
+    returnType = source.runMethodReturnType();
+    packageName = source.packageName();
+    classJavaDoc = source.classJavaDoc();
   }
 
   /**
@@ -44,6 +44,13 @@ public class ProcData {
    */
   public String name() {
     return name;
+  }
+
+  /**
+   * @return the fully qualified name of the stored procedure class
+   */
+  public String fullyQualifiedName() {
+    return packageName().equals("") ? name() : String.format("%s.%s", packageName(), name());
   }
 
   /**
@@ -76,7 +83,7 @@ public class ProcData {
 
   /**
    * Allows clear, type-safe building of a ProcData
-   * 
+   *
    * @author christo
    */
   public static class Builder {
@@ -90,54 +97,54 @@ public class ProcData {
       // intentionally left blank
     }
 
-    public Builder setName(String name) {
+    public Builder setName(final String name) {
       checkName(name);
       this.name = name;
       return this;
     }
 
-    public Builder setParameters(List<RunParameter> parameters) {
+    public Builder setParameters(final List<RunParameter> parameters) {
       checkParameters(parameters);
       this.parameters = ImmutableList.copyOf(parameters);
       return this;
     }
 
-    public Builder setReturnType(ProcReturnType returnType) {
+    public Builder setReturnType(final ProcReturnType returnType) {
       checkReturnType(returnType);
       this.returnType = returnType;
       return this;
     }
 
-    public Builder setPackageName(String packageName) {
+    public Builder setPackageName(final String packageName) {
       checkPackageName(packageName);
       this.packageName = packageName;
       return this;
     }
 
-    public Builder setClassJavaDoc(String classJavaDoc) {
+    public Builder setClassJavaDoc(final String classJavaDoc) {
       checkClassJavaDoc(classJavaDoc);
       this.classJavaDoc = classJavaDoc;
       return this;
     }
 
-    private void checkName(String name) {
+    private void checkName(final String name) {
       checkArgument(name != null, "name must not be null");
       checkArgument(!name.equals(""), "name must not be empty String");
     }
 
-    private void checkParameters(List<RunParameter> parameters) {
+    private void checkParameters(final List<RunParameter> parameters) {
       checkArgument(parameters != null, "parameters must not be null");
     }
 
-    private void checkReturnType(ProcReturnType returnType) {
+    private void checkReturnType(final ProcReturnType returnType) {
       checkArgument(returnType != null, "returnType must not be null");
     }
 
-    private void checkPackageName(String packageName) {
+    private void checkPackageName(final String packageName) {
       checkArgument(packageName != null, "packageName must not be null");
     }
 
-    private void checkClassJavaDoc(String classJavaDoc) {
+    private void checkClassJavaDoc(final String classJavaDoc) {
       checkArgument(classJavaDoc != null, "classJavaDoc must not be null");
     }
 
