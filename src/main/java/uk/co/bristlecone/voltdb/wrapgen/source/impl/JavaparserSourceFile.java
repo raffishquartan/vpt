@@ -22,27 +22,27 @@ import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 
 /**
  * Implements the {@link SourceFile} interface using a <code>com.github.javaparser.ast.CompilationUnit</code>.
- * 
+ *
  * @author christo
  */
 public class JavaparserSourceFile implements SourceFile {
-  private CompilationUnit ast;
-  private String filepath;
+  private final CompilationUnit ast;
+  private final String filepath;
 
-  public JavaparserSourceFile(CompilationUnit ast, String filepath) {
+  public JavaparserSourceFile(final CompilationUnit ast, final String filepath) {
     this.ast = ast;
     this.filepath = filepath;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#isValidVoltProcedure()
    */
   @Override
   public boolean isValidVoltProcedure() {
-    Optional<ClassOrInterfaceDeclaration> storedProc = getClassExtendingVoltProcedure();
-    Optional<MethodDeclaration> runMethod = getRunMethod();
+    final Optional<ClassOrInterfaceDeclaration> storedProc = getClassExtendingVoltProcedure();
+    final Optional<MethodDeclaration> runMethod = getRunMethod();
 
     if(!storedProc.isPresent()) {
       return false;
@@ -52,7 +52,7 @@ public class JavaparserSourceFile implements SourceFile {
       return false;
     }
 
-    Optional<String> returnType = getRunMethodReturnTypeAsString();
+    final Optional<String> returnType = getRunMethodReturnTypeAsString();
     if(!returnType.isPresent() || !ProcReturnType.isValidJavaType(getRunMethodReturnTypeAsString().get())) {
       return false;
     }
@@ -64,7 +64,7 @@ public class JavaparserSourceFile implements SourceFile {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#voltProcedureName()
    */
   @Override
@@ -76,7 +76,7 @@ public class JavaparserSourceFile implements SourceFile {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#runMethodParameters()
    */
   @Override
@@ -91,7 +91,7 @@ public class JavaparserSourceFile implements SourceFile {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#runMethodReturnType()
    */
   @Override
@@ -103,7 +103,7 @@ public class JavaparserSourceFile implements SourceFile {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#packageName()
    */
   @Override
@@ -115,7 +115,7 @@ public class JavaparserSourceFile implements SourceFile {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#classJavaDoc()
    */
   @Override
@@ -139,7 +139,7 @@ public class JavaparserSourceFile implements SourceFile {
    *         the same name in a different package).
    */
   private Optional<ClassOrInterfaceDeclaration> getClassExtendingVoltProcedure() {
-    ClassOrInterfaceType voltProcedure = new ClassOrInterfaceType("VoltProcedure");
+    final ClassOrInterfaceType voltProcedure = new ClassOrInterfaceType("VoltProcedure");
     return ast.getTypes()
         .stream()
         .filter(d -> d instanceof ClassOrInterfaceDeclaration)
@@ -162,7 +162,7 @@ public class JavaparserSourceFile implements SourceFile {
   /**
    * @return a RunParameter instance representing the JavaParser {@link com.github.javaparser.ast.body.Parameter} p.
    */
-  private static RunParameter mapParam(Parameter p) {
+  private static RunParameter mapParam(final Parameter p) {
     switch (parameterToTypeNameAsString(p)) {
     case "boolean":
     case "byte":
@@ -183,11 +183,11 @@ public class JavaparserSourceFile implements SourceFile {
    * @param param a JavaParser Parameter
    * @return the type of <code>param</code>, as a String
    */
-  private static String parameterToPackageNameAsString(Parameter param) {
-    CombinedTypeSolver cts = new CombinedTypeSolver();
+  private static String parameterToPackageNameAsString(final Parameter param) {
+    final CombinedTypeSolver cts = new CombinedTypeSolver();
     cts.add(new JreTypeSolver());
-    JavaParserFacade jpf = JavaParserFacade.get(cts);
-    String fqcn = jpf.getType(param, false)
+    final JavaParserFacade jpf = JavaParserFacade.get(cts);
+    final String fqcn = jpf.getType(param, false)
         .asReferenceType()
         .getTypeDeclaration()
         .asClass()
@@ -199,7 +199,7 @@ public class JavaparserSourceFile implements SourceFile {
    * @param param a JavaParser Parameter
    * @return the type of <code>param</code>, as a String
    */
-  private static String parameterToTypeNameAsString(Parameter param) {
+  private static String parameterToTypeNameAsString(final Parameter param) {
     return param.getType()
         .toString();
   }
@@ -208,7 +208,7 @@ public class JavaparserSourceFile implements SourceFile {
    * @param param a JavaParser Parameter
    * @return the variable name of <code>param</code>, as a String
    */
-  private static String parameterToVariableNameAsString(Parameter param) {
+  private static String parameterToVariableNameAsString(final Parameter param) {
     return param.getName();
   }
 }
