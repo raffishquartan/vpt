@@ -53,8 +53,23 @@ public class RunnerBuilderServices {
     result.append("<blockquote>");
     result.append(procData.classJavaDoc());
     result.append("</blockquote>\n\n");
-    result.append("<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
+    result.append("<strong>Class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
     result.append("@author voltdb-wrapgen\n");
+    return result.toString();
+  }
+
+  public String runnerRunMethodJavaDoc() {
+    final StringBuilder result = new StringBuilder();
+    result.append("<strong>Class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
+    result.append("For more information on the parameters and usage, see the underlying stored procedure: ");
+    result.append("{@link ");
+    result.append(procData.fullyQualifiedName());
+    result.append("}\n\n");
+    result.append("@param client The VoltDB client that is used to execute the ");
+    result.append(procData.name());
+    result.append(" stored procedure\n");
+    result.append("@return A CompletableFuture for the result of the stored procedure call\n");
+    result.append("@throws when the underlying call to {@link Client#callProcedure} (or similar) throws\n");
     return result.toString();
   }
 
