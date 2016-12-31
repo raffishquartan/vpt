@@ -19,10 +19,16 @@ public class RunnerBuilderTest {
   // @formatter:off
   private static final String PROC_DATA_PACKAGE_NAME = "mock.package.name";
   private static final String PROC_DATA_CLASS_NAME = "MockStoredProcedureName";
-  private static final String EXPECTED_CLASS_WITH_IDENTITY_NAMERS = "" 
+  private static final String EXPECTED_CLASS_WITH_IDENTITY_NAMERS = ""
       + String.format("package %s;\n", PROC_DATA_PACKAGE_NAME)
       + String.format("\n")
+      + String.format("import java.io.IOException;\n")
+      + String.format("import java.util.concurrent.CompletableFuture;\n")
+      + String.format("import org.voltdb.client.ClientResponse;\n")
+      + String.format("import org.voltdb.client.NoConnectionsException;\n")
+      + String.format("import org.voltdb.client.ProcedureCallback;\n")
       + String.format("import uk.co.bristlecone.voltdb.wrapgen.runner.VoltRunner;\n")
+      + String.format("import uk.co.bristlecone.voltdb.wrapgen.runner.WrapgenUtil;\n")
       + String.format("\n")
       + String.format("/**\n")
       + String.format(" * An instance of this class can be used to run the <code>%s</code> ", PROC_DATA_CLASS_NAME)
@@ -36,6 +42,12 @@ public class RunnerBuilderTest {
       + String.format(" */\n")
       + String.format("@VoltRunner\n")
       + String.format("public class %s {\n", PROC_DATA_CLASS_NAME)
+      + String.format("  CompletableFuture<ClientResponse> run() throws NoConnectionsException, IOException {\n")
+      + String.format("    CompletableFuture<ClientResponse> result = new CompletableFuture<ClientResponse>();\n")
+      + String.format("    ProcedureCallback handler = WrapgenUtil.getHandler(result);\n")
+      + String.format("    client.callProcedure(handler, \"MockStoredProcedureName\", );\n")
+      + String.format("    return result;\n")
+      + String.format("  }\n")
       + String.format("}\n");
   // @formatter:on
 
@@ -48,7 +60,8 @@ public class RunnerBuilderTest {
     }};
     // @formatter:on
 
-    VoltRunnerJavaSource testee = new RunnerBuilder(mockProcData, Function.identity(), Function.identity()).build();
+    final VoltRunnerJavaSource testee = new RunnerBuilder(mockProcData, Function.identity(), Function.identity())
+        .build();
 
     assertThat(testee.source(), is(equalTo(EXPECTED_CLASS_WITH_IDENTITY_NAMERS)));
   }
