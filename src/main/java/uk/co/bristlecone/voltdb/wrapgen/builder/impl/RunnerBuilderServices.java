@@ -82,6 +82,17 @@ public class RunnerBuilderServices {
         .collect(Collectors.joining(", "));
   }
 
+  /**
+   * @return the number of parameters to the stored procedure's run() method
+   */
+  public int runMethodNumberOfParams() {
+    return procData.parameters()
+        .size();
+  }
+
+  /**
+   * @return Return a ParameterSpec.Builder for the provided RunParameter
+   */
   private static ParameterSpec.Builder runParameterToParameterSpecBuilder(final RunParameter rp) {
     if(rp.isPrimitive()) {
       final RunParameterPrimitive rpp = (RunParameterPrimitive) rp;
@@ -90,6 +101,5 @@ public class RunnerBuilderServices {
       final RunParameterClass rpc = (RunParameterClass) rp;
       return ParameterSpec.builder(ClassName.get(rpc.packageName(), rpc.typeName()), rpc.variableName());
     }
-
   }
 }
