@@ -1,6 +1,7 @@
 package uk.co.bristlecone.voltdb.wrapgen.builder;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -35,18 +36,15 @@ public class RunnerBuilder {
   }
 
   public VoltRunnerJavaSource build() {
-    final TypeName runnerRunReturnType = ParameterizedTypeName.get(CompletableFuture.class, ClientResponse.class);
-    final String callProcedureParamsAsVariableList = String.format("handler, \"%s\", %s", rbs.procName(),
-        rbs.runMethodParamsAsVariableList());
     final MethodSpec runMethod = MethodSpec.methodBuilder("run")
         .addParameter(Client.class, "client", Modifier.FINAL)
         .addParameters(rbs.runMethodParamsAsParameterSpecs())
         .addException(NoConnectionsException.class)
         .addException(IOException.class)
-        .returns(runnerRunReturnType)
-        .addStatement("$T result = new $T()", runnerRunReturnType, runnerRunReturnType)
+        .returns(runnerRunReturnType())
+        .addStatement("$T result = new $T()", runnerRunReturnType(), runnerRunReturnType())
         .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, WrapgenUtil.class)
-        .addStatement("client.callProcedure($L)", callProcedureParamsAsVariableList)
+        .addStatement("client.callProcedure($L)", callProcedureParamsAsVariableList())
         .addStatement("return result")
         .build();
     final TypeSpec runnerClassBuilder = TypeSpec.classBuilder(rbs.runnerName())
@@ -54,10 +52,46 @@ public class RunnerBuilder {
         .addAnnotation(VoltRunner.class)
         .addJavadoc(rbs.runnerJavaDoc())
         .addMethod(runMethod)
-        // .addMethod(runWithTimeoutMethod)
+        .addMethod(buildRunWithTimeoutMethodSpec())
         .build();
     final JavaFile fileBuilder = JavaFile.builder(rbs.runnerPackageName(), runnerClassBuilder)
         .build();
     return new VoltRunnerJavaSource(fileBuilder.toString());
+  }
+
+  private static TypeName runnerRunReturnType() {
+    return ParameterizedTypeName.get(CompletableFuture.class, ClientResponse.class);
+  }
+
+  private MethodSpec buildRunWithTimeoutMethodSpec() {
+    return MethodSpec.methodBuilder("runWithTimeout")
+        .addParameter(Client.class, "client", Modifier.FINAL)
+        .addParameter(Duration.class, "timeout", Modifier.FINAL)
+        .addParameters(rbs.runMethodParamsAsParameterSpecs())
+        .addException(NoConnectionsException.class)
+        .addException(IOException.class)
+        .returns(runnerRunReturnType())
+        .addStatement("$T result = new $T()", runnerRunReturnType(), runnerRunReturnType())
+        .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, WrapgenUtil.class)
+        .addStatement("client.callProcedure($L)", callProcedureWithTimeoutParamsAsVariableList("timeout"))
+        .addStatement("return result")
+        .build();
+  }
+
+  private String callProcedureParamsAsVariableList() {
+    if(rbs.runMethodNumberOfParams() > 0) {
+      return String.format("handler, \"%s\", %s", rbs.procName(), rbs.runMethodParamsAsVariableList());
+    } else {
+      return String.format("handler, \"%s\"", rbs.procName());
+    }
+  }
+
+  private String callProcedureWithTimeoutParamsAsVariableList(final String timeoutVariableName) {
+    if(rbs.runMethodNumberOfParams() > 0) {
+      return String.format("handler, Math.toIntExact(%s.toMillis()), \"%s\", %s", timeoutVariableName, rbs.procName(),
+          rbs.runMethodParamsAsVariableList());
+    } else {
+      return String.format("handler, Math.toIntExact(%s.toMillis()), \"%s\"", timeoutVariableName, rbs.procName());
+    }
   }
 }
