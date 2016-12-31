@@ -54,6 +54,7 @@ public class RunnerBuilder {
 
   private MethodSpec buildRunMethodSpec() {
     return MethodSpec.methodBuilder("run")
+        .addJavadoc(rbs.runnerRunMethodJavaDoc())
         .addParameter(Client.class, "client", Modifier.FINAL)
         .addParameters(rbs.runMethodParamsAsParameterSpecs())
         .addException(NoConnectionsException.class)
@@ -68,6 +69,7 @@ public class RunnerBuilder {
 
   private MethodSpec buildRunWithTimeoutMethodSpec() {
     return MethodSpec.methodBuilder("runWithTimeout")
+        .addJavadoc(rbs.runnerRunMethodJavaDoc())
         .addParameter(Client.class, "client", Modifier.FINAL)
         .addParameter(Duration.class, "timeout", Modifier.FINAL)
         .addParameters(rbs.runMethodParamsAsParameterSpecs())
