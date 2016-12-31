@@ -1,7 +1,7 @@
 package uk.co.bristlecone.voltdb.wrapgen.builder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
 import static org.hamcrest.Matchers.is;
 
 import java.util.function.Function;
@@ -24,6 +24,7 @@ public class RunnerBuilderTest {
       + String.format("\n")
       + String.format("import java.io.IOException;\n")
       + String.format("import java.util.concurrent.CompletableFuture;\n")
+      + String.format("import org.voltdb.client.Client;\n")
       + String.format("import org.voltdb.client.ClientResponse;\n")
       + String.format("import org.voltdb.client.NoConnectionsException;\n")
       + String.format("import org.voltdb.client.ProcedureCallback;\n")
@@ -42,7 +43,7 @@ public class RunnerBuilderTest {
       + String.format(" */\n")
       + String.format("@VoltRunner\n")
       + String.format("public class %s {\n", PROC_DATA_CLASS_NAME)
-      + String.format("  CompletableFuture<ClientResponse> run() throws NoConnectionsException, IOException {\n")
+      + String.format("  CompletableFuture<ClientResponse> run(final Client client) throws NoConnectionsException, IOException {\n")
       + String.format("    CompletableFuture<ClientResponse> result = new CompletableFuture<ClientResponse>();\n")
       + String.format("    ProcedureCallback handler = WrapgenUtil.getHandler(result);\n")
       + String.format("    client.callProcedure(handler, \"MockStoredProcedureName\", );\n")
@@ -63,6 +64,6 @@ public class RunnerBuilderTest {
     final VoltRunnerJavaSource testee = new RunnerBuilder(mockProcData, Function.identity(), Function.identity())
         .build();
 
-    assertThat(testee.source(), is(equalTo(EXPECTED_CLASS_WITH_IDENTITY_NAMERS)));
+    assertThat(testee.source(), is(equalToIgnoringWhiteSpace(EXPECTED_CLASS_WITH_IDENTITY_NAMERS)));
   }
 }
