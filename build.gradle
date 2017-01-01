@@ -1,18 +1,14 @@
-/*
 allprojects {
   task wrapper(type: Wrapper) { gradleVersion = '3.2.1' }
 }
-*/
 
-/*
 subprojects {
   apply plugin: 'java'
   apply plugin: 'eclipse'
-  apply plugin: 'maven'
 
   repositories {
       jcenter()
-      mavenLocal() // needed for voltdb-x.y.z.jar
+      mavenLocal() // needed for voltdb-x.y.z.jar, which must be deployed locally
   }
 
   sourceCompatibility = 1.8
@@ -30,4 +26,3 @@ subprojects {
     project.natures 'org.eclipse.buildship.core.gradleprojectnature'
   }
 }
-*/

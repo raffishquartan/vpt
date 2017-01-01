@@ -1,25 +1,4 @@
-apply plugin: 'java'
-//apply plugin: 'eclipse'
-//apply plugin: 'maven'
-
-repositories {
-    jcenter()
-    mavenLocal() // needed for voltdb-x.y.z.jar
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-version = '0.0.1-SNAPSHOT'
-group = 'uk.co.bristlecone.voltdb.wrapgen'
-
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile 'org.jmockit:jmockit:1.26'
-
     compile 'com.google.guava:guava:20.0'
     compile 'com.squareup:javapoet:1.8.0'
     compile 'me.tomassetti:java-symbol-solver-core:0.3.1'
@@ -27,9 +6,3 @@ dependencies {
     compile 'org.voltdb:voltdbclient:6.4'    
     compile 'org.voltdb:voltdb:6.4'
 }
-
-//eclipse {
-//  project.natures 'org.eclipse.buildship.core.gradleprojectnature'
-//}
-
-
