@@ -1,4 +1,2 @@
 include "wrapgen-core"
 include "console-wrapgen"
-
-rootProject.name = 'voltdb-wrapgen'
