@@ -53,14 +53,14 @@ public class RunnerBuilderServices {
     result.append("<blockquote>");
     result.append(procData.classJavaDoc());
     result.append("</blockquote>\n\n");
-    result.append("<strong>Class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
+    result.append("<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
     result.append("@author voltdb-wrapgen\n");
     return result.toString();
   }
 
   public String runnerRunMethodJavaDoc() {
     final StringBuilder result = new StringBuilder();
-    result.append("<strong>Class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
+    result.append("<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
     result.append("For more information on the parameters and usage, see the underlying stored procedure: ");
     result.append("{@link ");
     result.append(procData.fullyQualifiedName());
