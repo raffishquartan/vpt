@@ -70,7 +70,7 @@ Also it's [bad practice](https://docs.voltdb.com/UsingVoltDB/DesignAppAsync.php#
 
 WrapGen is built using gradle: `./gradlew build`
 
-That said, it depends on the VoltDB client library, which is not available in any public repo. If it is not already present in your library you will need to install it locally before you can build WrapGen: 
+Important note: WrapGen depends on the VoltDB client library, which is not available in any public repo. If it is not already present in your local repo you will need to install it before you can build WrapGen: 
 
 `mvn install:install-file -Dfile=/path/to/voltdb-x.y.z.jar -DgroupId=org.voltdb -DartifactId=voltdb -Dversion=5.8.1 -Dpackaging=jar`
 
@@ -86,7 +86,9 @@ console-wrapgen takes four command line arguments. All of them must be specified
 
 The root of each runner's package will be the `--packagebase`, e.g.: `--packagebase=voltdb.myrunners`. The regex suffix is then applied to the stored procedure's package and the first matching group is appended to the package base.
 
-For example, if the VoltDB stored procedure MyStoredProcedure class was defined in the package  `uk.co.bristlecone.voltdb.datamanip` and `--regexsuffix=uk.co.bristlecone.voltdb.datamanip.(.*)` then the runner's fully qualified classname would be `voltdb.myrunners.datamanip.MyStoredProcedure`. If the suffix regex does not match then the runner is placed in `--packagebase`. Runner names clashing in this situation is not handled specially. 
+For example, if the VoltDB stored procedure MyStoredProcedure class was defined in the package  `uk.co.bristlecone.voltdb.datamanip` and `--regexsuffix=uk.co.bristlecone.voltdb.datamanip.(.*)` then the runner's fully qualified classname would be `voltdb.myrunners.datamanip.MyStoredProcedure`. Remember to escape globbing characters in the command line parameter.
+
+If the suffix regex does not match then the runner is placed in `--packagebase`. Runner names clashing in this situation is not handled specially. 
 
 ## WrapGen Issues and Future Features
 
@@ -97,7 +99,10 @@ For example, if the VoltDB stored procedure MyStoredProcedure class was defined 
 - Group source files into "is", "is not" and "maybe" contain stored procedure's, for clearer logging
 - Make backup copies and log loudly if any file being overwritten is different to the generated code (manual modification warnings) 
 - Build runners that use the run-everywhere pattern for appropriate stored procedures...
-- ...with customisable, per-`ClientResponseWithPartitionKey`, join strategies  
+- ...with customisable, per-`ClientResponseWithPartitionKey`, join strategies
+- Add WrapGenClientInterface, replicating VoltDB's and overload runners to allow either to be used (lets you define a custom client, e.g. with more logging)  
+- Add some ClientResponse helper methods
+  - E.g. for getting the string value of any column without manually specifying its type
 
 ## Roadmap
 
@@ -107,7 +112,8 @@ For example, if the VoltDB stored procedure MyStoredProcedure class was defined 
 - eclipse-wrapgen plugin
 - intellij-wrapgen plugin
 - An independent tool to check stored procedure's for correctness: VoltLint
+  - Do smarter linting here to detect more issues - non-final `SQLStmt's`, use of non-final statics, ...
 
 ## Changelog
 
-- 0.0.1 - first released version - wrapgen-core, console-wrapgen
+- 0.0.1 - first released version - wrapgen-core, console-wrapgen - **NOT YET RELEASED, COMING SOON**
