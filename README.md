@@ -74,6 +74,8 @@ Important note: WrapGen depends on the VoltDB client library, which is not avail
 
 `mvn install:install-file -Dfile=/path/to/voltdb-x.y.z.jar -DgroupId=org.voltdb -DartifactId=voltdb -Dversion=5.8.1 -Dpackaging=jar`
 
+NB: WrapGen is written using Java 8 but generates Java 7-source code.
+
 ## console-wrapgen Usage
 
 **To be finalised as development is completed**
