@@ -1,9 +1,12 @@
 package uk.co.bristlecone.voltdb.wrapgen.source.impl;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -157,6 +160,14 @@ public class JavaparserSourceFile implements SourceFile {
     return getClassExtendingVoltProcedure().flatMap(c -> c.getMethodsByName("run")
         .stream()
         .findFirst());
+  }
+
+  public static JavaparserSourceFile make(Path path) {
+    try {
+      return new JavaparserSourceFile(JavaParser.parse(path), path.toString());
+    } catch (IOException e) {
+      throw new WrapgenRuntimeException("Error creating JavaparserSourceFile object", e);
+    }
   }
 
   /**
