@@ -60,9 +60,15 @@ public class JavaparserSourceFile implements SourceFile {
       return false;
     }
 
-    // TODO - checks to do, e.g. throws the wrong type of chcekced exception
+    // TODO - checks to do, eg throws the wrong type of chcekced exception, that class extending voltproc isn't abstract
 
     return true;
+  }
+
+  @Override
+  public boolean isIntendedVoltProcedure() {
+    // TODO also check that the class extending volt procedure is not abstract
+    return getClassExtendingVoltProcedure().isPresent();
   }
 
   /*
