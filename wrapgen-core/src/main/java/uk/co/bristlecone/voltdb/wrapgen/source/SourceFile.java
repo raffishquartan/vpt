@@ -21,9 +21,16 @@ public interface SourceFile {
   String NO_CLASS_JAVADOC_TEXT = "{none provided}";
 
   /**
+   * TODO: Check that the class is not abstract
+   * 
    * @return true iff this SourceFile contains a valid VoltDB stored procedure
    */
   boolean isValidVoltProcedure();
+
+  /**
+   * @return true iff the class extends VoltProcedure and is not abstract - i.e., valid or not, is intended to be a proc
+   */
+  boolean isIntendedVoltProcedure();
 
   /**
    * @return the name of the VoltDB stored procedure in this source file; does not return an Optional but throws a
