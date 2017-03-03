@@ -2,7 +2,9 @@ package uk.co.bristlecone.voltdb.wrapgen.console;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
@@ -20,20 +22,20 @@ import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
  * @author christo
  */
 public class Configuration {
-  private final File sourceDir;
-  private final File destDir;
+  private final Path sourceDir;
+  private final Path destDir;
   private final String packageBase;
   private final Pattern regexSuffix;
 
   public Configuration(final String[] commandLineArgs) {
     try {
       final CommandLine cmd = new DefaultParser().parse(getCommandLineOptions(), commandLineArgs, false);
-      sourceDir = new File(cmd.getOptionValue("source"));
-      destDir = new File(cmd.getOptionValue("destination"));
+      sourceDir = Paths.get(cmd.getOptionValue("source"));
+      destDir = Paths.get(cmd.getOptionValue("destination"));
       packageBase = cmd.getOptionValue("packagebase");
       regexSuffix = Pattern.compile(cmd.getOptionValue("regexsuffix"));
-      checkArgument(sourceDir.exists() && sourceDir.isDirectory(), "source must be a valid directory");
-      checkArgument(destDir.exists() && destDir.isDirectory(), "destination must be a valid directory");
+      checkArgument(Files.isDirectory(sourceDir), "source must be a valid directory");
+      checkArgument(Files.isDirectory(destDir), "destination must be a valid directory");
     } catch (final ParseException e) {
       throw new WrapgenRuntimeException("Error parsing command lines, see inner excception for details", e);
     }
@@ -55,11 +57,11 @@ public class Configuration {
         .addOption(r);
   }
 
-  public File sourceDir() {
+  public Path sourceDir() {
     return sourceDir;
   }
 
-  public File destDir() {
+  public Path destDir() {
     return destDir;
   }
 
