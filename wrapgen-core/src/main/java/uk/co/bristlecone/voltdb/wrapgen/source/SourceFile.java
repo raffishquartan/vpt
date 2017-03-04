@@ -10,7 +10,7 @@ import uk.co.bristlecone.voltdb.wrapgen.runner.VoltRunner;
  * {@link VoltRunner}. These accessor methods may throw a {@link WrapgenRuntimeException} if the associated Java source
  * does not contain a valid VoltDB stored procedure, so the {@link SourceFile#isValidVoltProcedure} method should be
  * used to guard against this.
- * 
+ *
  * @author christo
  */
 public interface SourceFile {
@@ -21,8 +21,13 @@ public interface SourceFile {
   String NO_CLASS_JAVADOC_TEXT = "{none provided}";
 
   /**
+   * @return An expected-unique and user-meaningful identifier (e.g. file path, URI or similar) for this SourceFile
+   */
+  String identifier();
+
+  /**
    * TODO: Check that the class is not abstract
-   * 
+   *
    * @return true iff this SourceFile contains a valid VoltDB stored procedure
    */
   boolean isValidVoltProcedure();
