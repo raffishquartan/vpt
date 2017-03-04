@@ -40,6 +40,16 @@ public class JavaparserSourceFile implements SourceFile {
   /*
    * (non-Javadoc)
    *
+   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#identifier()
+   */
+  @Override
+  public String identifier() {
+    return filepath;
+  }
+
+  /*
+   * (non-Javadoc)
+   *
    * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#isValidVoltProcedure()
    */
   @Override
@@ -168,10 +178,10 @@ public class JavaparserSourceFile implements SourceFile {
         .findFirst());
   }
 
-  public static JavaparserSourceFile make(Path path) {
+  public static JavaparserSourceFile make(final Path path) {
     try {
       return new JavaparserSourceFile(JavaParser.parse(path), path.toString());
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new WrapgenRuntimeException("Error creating JavaparserSourceFile object", e);
     }
   }
