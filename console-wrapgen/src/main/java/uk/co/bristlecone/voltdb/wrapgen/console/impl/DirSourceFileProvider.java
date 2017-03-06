@@ -13,10 +13,10 @@ import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 import uk.co.bristlecone.voltdb.wrapgen.source.impl.JavaparserSourceFile;
 
-public class DirectorySourceFileProvider implements SourceFileProvider {
+public class DirSourceFileProvider implements SourceFileProvider {
   private Path rootDir;
 
-  public DirectorySourceFileProvider(Path rootDir) {
+  public DirSourceFileProvider(Path rootDir) {
     this.rootDir = rootDir;
     checkArgument(Files.isDirectory(rootDir), "rootDir must be a valid directory");
   }
