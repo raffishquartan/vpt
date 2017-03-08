@@ -74,8 +74,7 @@ public class SourceFileProcessor {
   private SourceFileResult doValidProcOverwrite(final Path destPath, final VoltRunnerJavaSource vrjs,
       final SourceFile sf) {
     try {
-      Files.move(destPath, getBackupPath(destPath), StandardCopyOption.REPLACE_EXISTING,
-          StandardCopyOption.COPY_ATTRIBUTES);
+      Files.move(destPath, getBackupPath(destPath), StandardCopyOption.REPLACE_EXISTING);
       Files.write(destPath, vrjs.source().getBytes());
       return SourceFileResult.of(sf.identifier(), Result.RUNNER_OVERWRITTEN);
     } catch (final IOException e) {
@@ -86,7 +85,7 @@ public class SourceFileProcessor {
 
   private Path getBackupPath(final Path destPath) {
     final String datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-    return destPath.resolve(String.format("%s.%s", destPath, datetime));
+    return destPath.getParent().resolve(String.format("%s.%s", destPath.getFileName(), datetime));
   }
 
   private SourceFileResult doValidProcWrite(final Path destFile, final VoltRunnerJavaSource vrjs, final SourceFile sf) {
