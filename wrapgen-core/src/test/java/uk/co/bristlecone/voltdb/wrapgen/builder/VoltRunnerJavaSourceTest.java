@@ -14,7 +14,7 @@ public class VoltRunnerJavaSourceTest {
   private static final String EXP_CLASS = "TestRunner";
 
   private static final String EXP_FQ_NAME = String.format("%s.%s", EXP_PACKAGE, EXP_CLASS);
-  private static final String EXP_FQ_PATH = String.format("%s%s%s", EXP_BASE_PATH, File.separator, EXP_CLASS);
+  private static final String EXP_FQ_PATH = String.format("%s%s%s.java", EXP_BASE_PATH, File.separator, EXP_CLASS);
 
   // @formatter:off
   private final static String EXAMPLE__VOLT_RUNNER_ANNOTATION_ON_DIFF_LINE = ""
