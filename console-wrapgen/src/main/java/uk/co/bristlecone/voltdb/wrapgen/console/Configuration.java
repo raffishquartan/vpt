@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -35,14 +36,16 @@ public class Configuration {
       packageBase = cmd.getOptionValue("packagebase");
       regexSuffix = Pattern.compile(cmd.getOptionValue("regexsuffix"));
       checkArgument(Files.isDirectory(sourceDir), "source must be a valid directory");
-      checkArgument(Files.isDirectory(destDir), "destination must be a valid directory");
+      checkArgument(Files.isDirectory(destDir) || !Files.exists(destDir),
+          "destination must be a valid directory if it exists");
     } catch (final ParseException e) {
-      throw new WrapgenRuntimeException("Error parsing command lines, see inner excception for details", e);
+      final HelpFormatter help = new HelpFormatter();
+      help.printHelp("console-wrapgen", getCommandLineOptions());
+      throw new WrapgenRuntimeException("Error parsing command lines, aborting", e);
     }
   }
 
   private Options getCommandLineOptions() {
-    // final org.apache.commons.
     final Option s = new Option("s", "source", true, "root directory of stored procedures");
     s.setRequired(true);
     final Option d = new Option("d", "destination", true, "root destination directory for runners");
