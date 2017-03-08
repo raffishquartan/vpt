@@ -14,15 +14,14 @@ import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
 import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
-import uk.co.bristlecone.voltdb.wrapgen.console.impl.SourceFilePartitioner;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 
 @RunWith(JMockit.class)
 public class SourceFilePartitionerTest {
 
   @Test
-  public void allSourceFilesReturnsExpectedStream(@Mocked SourceFileProvider mockSFProvider, @Mocked SourceFile validSF,
-      @Mocked SourceFile invalidSF, @Mocked SourceFile notprocSF) {
+  public void allSourceFilesReturnsExpectedStream(@Mocked final SourceFileProvider mockSFProvider,
+      @Mocked final SourceFile validSF, @Mocked final SourceFile invalidSF, @Mocked final SourceFile notprocSF) {
     // @formatter:off
     new Expectations() {{
       mockSFProvider.freshSourceFileStream(); result = ImmutableList.of(validSF, invalidSF, notprocSF).stream();
@@ -30,13 +29,13 @@ public class SourceFilePartitionerTest {
     // @formatter:on
 
     final SourceFilePartitioner testee = new SourceFilePartitioner(mockSFProvider);
-    assertThat(testee.freshStreamOfAllSourceFiles()
-        .collect(Collectors.toList()), containsInAnyOrder(validSF, invalidSF, notprocSF));
+    assertThat(testee.freshStreamOfAllSourceFiles().collect(Collectors.toList()),
+        containsInAnyOrder(validSF, invalidSF, notprocSF));
   }
 
   @Test
-  public void notProcSourceFilesReturnsExpectedStream(@Mocked SourceFileProvider mockSFProvider,
-      @Mocked SourceFile validSF, @Mocked SourceFile invalidSF, @Mocked SourceFile notprocSF) {
+  public void notProcSourceFilesReturnsExpectedStream(@Mocked final SourceFileProvider mockSFProvider,
+      @Mocked final SourceFile validSF, @Mocked final SourceFile invalidSF, @Mocked final SourceFile notprocSF) {
     // @formatter:off
     new Expectations() {{
       mockSFProvider.freshSourceFileStream(); result = ImmutableList.of(validSF, invalidSF, notprocSF).stream();
@@ -47,13 +46,12 @@ public class SourceFilePartitionerTest {
     // @formatter:on
 
     final SourceFilePartitioner testee = new SourceFilePartitioner(mockSFProvider);
-    assertThat(testee.freshStreamOfNotProcSourceFiles()
-        .collect(Collectors.toList()), containsInAnyOrder(notprocSF));
+    assertThat(testee.freshStreamOfNotProcSourceFiles().collect(Collectors.toList()), containsInAnyOrder(notprocSF));
   }
 
   @Test
-  public void validProcSourceFilesReturnsExpectedStream(@Mocked SourceFileProvider mockSFProvider,
-      @Mocked SourceFile validSF, @Mocked SourceFile invalidSF, @Mocked SourceFile notprocSF) {
+  public void validProcSourceFilesReturnsExpectedStream(@Mocked final SourceFileProvider mockSFProvider,
+      @Mocked final SourceFile validSF, @Mocked final SourceFile invalidSF, @Mocked final SourceFile notprocSF) {
     // @formatter:off
     new Expectations() {{
       mockSFProvider.freshSourceFileStream(); result = ImmutableList.of(validSF, invalidSF, notprocSF).stream();
@@ -64,13 +62,12 @@ public class SourceFilePartitionerTest {
     // @formatter:on
 
     final SourceFilePartitioner testee = new SourceFilePartitioner(mockSFProvider);
-    assertThat(testee.freshStreamOfValidProcSourceFiles()
-        .collect(Collectors.toList()), containsInAnyOrder(validSF));
+    assertThat(testee.freshStreamOfValidProcSourceFiles().collect(Collectors.toList()), containsInAnyOrder(validSF));
   }
 
   @Test
-  public void invalidProcSourceFilesReturnsExpectedStream(@Mocked SourceFileProvider mockSFProvider,
-      @Mocked SourceFile validSF, @Mocked SourceFile invalidSF, @Mocked SourceFile notprocSF) {
+  public void invalidProcSourceFilesReturnsExpectedStream(@Mocked final SourceFileProvider mockSFProvider,
+      @Mocked final SourceFile validSF, @Mocked final SourceFile invalidSF, @Mocked final SourceFile notprocSF) {
     // @formatter:off
     new Expectations() {{
       mockSFProvider.freshSourceFileStream(); result = ImmutableList.of(validSF, invalidSF, notprocSF).stream();
@@ -81,7 +78,7 @@ public class SourceFilePartitionerTest {
     // @formatter:on
 
     final SourceFilePartitioner testee = new SourceFilePartitioner(mockSFProvider);
-    assertThat(testee.freshStreamOftreamInvalidProcSourceFiles()
-        .collect(Collectors.toList()), containsInAnyOrder(invalidSF));
+    assertThat(testee.freshStreamOftreamInvalidProcSourceFiles().collect(Collectors.toList()),
+        containsInAnyOrder(invalidSF));
   }
 }

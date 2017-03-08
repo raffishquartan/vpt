@@ -3,7 +3,6 @@ package uk.co.bristlecone.voltdb.wrapgen.console;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,32 +55,28 @@ public class SourceFileProcessor {
   }
 
   private SourceFileResult doValidProc(final SourceFile sf) {
-    final ProcData pd = new ProcData.Builder().setClassJavaDoc(sf.classJavaDoc())
-        .setName(sf.voltProcedureName())
-        .setPackageName(sf.packageName())
-        .setParameters(sf.runMethodParameters())
-        .setReturnType(sf.runMethodReturnType())
-        .build();
+    final ProcData pd = new ProcData.Builder().setClassJavaDoc(sf.classJavaDoc()).setName(sf.voltProcedureName())
+        .setPackageName(sf.packageName()).setParameters(sf.runMethodParameters())
+        .setReturnType(sf.runMethodReturnType()).build();
     final VoltRunnerJavaSource vrjs = new RunnerBuilder(pd, packageNamer::getPackage, Function.identity()).build();
-    final Path dest = getDestinationPath(vrjs.fullyQualifiedClassFilePath());
-    if(Files.exists(dest)) {
-      return doValidProcOverwrite(dest, vrjs, sf);
+    final Path destFile = getDestPath(vrjs.fullyQualifiedClassFilePath());
+    if(Files.exists(destFile)) {
+      return doValidProcOverwrite(destFile, vrjs, sf);
     } else {
-      return doValidProcWrite(dest, vrjs, sf);
+      return doValidProcWrite(destFile, vrjs, sf);
     }
   }
 
-  private Path getDestinationPath(final String procChildPath) {
-    return config.destDir()
-        .resolve(procChildPath);
+  private Path getDestPath(final String fullyQualifiedClassPath) {
+    return config.destDir().resolve(fullyQualifiedClassPath);
   }
 
-  private SourceFileResult doValidProcOverwrite(final Path dest, final VoltRunnerJavaSource vrjs, final SourceFile sf) {
+  private SourceFileResult doValidProcOverwrite(final Path destPath, final VoltRunnerJavaSource vrjs,
+      final SourceFile sf) {
     try {
-      Files.move(dest, getBackupPath(vrjs.fullyQualifiedClassFilePath()), StandardCopyOption.REPLACE_EXISTING,
+      Files.move(destPath, getBackupPath(destPath), StandardCopyOption.REPLACE_EXISTING,
           StandardCopyOption.COPY_ATTRIBUTES);
-      Files.write(dest, vrjs.source()
-          .getBytes());
+      Files.write(destPath, vrjs.source().getBytes());
       return SourceFileResult.of(sf.identifier(), Result.RUNNER_OVERWRITTEN);
     } catch (final IOException e) {
       LOGGER.error("Error backing up and replacing class with same path as " + sf.identifier(), e);
@@ -89,20 +84,18 @@ public class SourceFileProcessor {
     }
   }
 
-  private Path getBackupPath(final String procChildPath) {
-    final String datetime = LocalDateTime.now()
-        .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-    return config.destDir()
-        .resolve(String.format("%s.%s", procChildPath, datetime));
+  private Path getBackupPath(final Path destPath) {
+    final String datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+    return destPath.resolve(String.format("%s.%s", destPath, datetime));
   }
 
-  private SourceFileResult doValidProcWrite(final Path dest, final VoltRunnerJavaSource vrjs, final SourceFile sf) {
+  private SourceFileResult doValidProcWrite(final Path destFile, final VoltRunnerJavaSource vrjs, final SourceFile sf) {
     try {
-      Files.write(Paths.get(vrjs.fullyQualifiedClassFilePath()), vrjs.source()
-          .getBytes());
+      Files.createDirectories(destFile.getParent());
+      Files.write(destFile, vrjs.source().getBytes());
       return SourceFileResult.of(sf.identifier(), Result.RUNNER_WRITTEN);
     } catch (final IOException e) {
-      LOGGER.error("Error writing runner to " + dest, e);
+      LOGGER.error("Error writing runner to " + destFile, e);
       return SourceFileResult.of(sf.identifier(), Result.RUNNER_WRITE_ERROR);
     }
   }
