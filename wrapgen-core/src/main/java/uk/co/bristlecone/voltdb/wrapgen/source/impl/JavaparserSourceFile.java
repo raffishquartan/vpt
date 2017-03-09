@@ -140,7 +140,8 @@ public class JavaparserSourceFile implements SourceFile {
   @Override
   public String classJavaDoc() {
     return getClassExtendingVoltProcedure().map(c -> c.getJavaDoc())
-        .map(j -> j.toString())
+        .map(jc -> jc.getContent())
+        .map(s -> s.replaceAll("\\n\\s\\*\\s", "\n"))
         .orElse(SourceFile.NO_CLASS_JAVADOC_TEXT);
   }
 
