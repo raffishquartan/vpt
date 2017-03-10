@@ -23,13 +23,13 @@ appender("CONSOLE", ConsoleAppender) {
     level = INFO
   }
   encoder(PatternLayoutEncoder) {
-    pattern = "%d{yyyyMMdd:HHmmss} [%thread] %5level %logger{36} :: %msg%n"
+    pattern = "%d{yyyyMMdd:HHmmss.SSS} [%thread] %5level %logger{36} :: %msg%n"
   }
 }
 appender("FILE", RollingFileAppender) {
   file = "logs/log.log"
   encoder(PatternLayoutEncoder) {
-    pattern = "%d{yyyyMMdd:HHmmss} [%thread] %5level %logger{36} :: %msg%n"
+    pattern = "%d{yyyyMMdd:HHmmss.SSS} [%thread] %5level %logger{36} :: %msg%n"
   }
   rollingPolicy(SizeAndTimeBasedRollingPolicy) {
     fileNamePattern = "logs/log.%d{yyyyMMdd}.%i.txt"
