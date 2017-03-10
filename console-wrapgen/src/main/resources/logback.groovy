@@ -16,8 +16,12 @@ import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+import ch.qos.logback.classic.filter.ThresholdFilter
 
 appender("CONSOLE", ConsoleAppender) {
+  filter(ThresholdFilter) {
+    level = INFO
+  }
   encoder(PatternLayoutEncoder) {
     pattern = "%d{yyyyMMdd:HHmmss} [%thread] %5level %logger{36} :: %msg%n"
   }
@@ -34,4 +38,4 @@ appender("FILE", RollingFileAppender) {
     totalSizeCap = "20GB"
   }
 }
-root(INFO, ["FILE", "CONSOLE"])
+root(DEBUG, ["FILE", "CONSOLE"])
