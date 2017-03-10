@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SourceFileResultProcessor {
-  public static final Logger LOGGER = LoggerFactory.getLogger(SourceFileResultProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SourceFileResultProcessor.class);
 
   public static void process(final SourceFileResult sfr) {
     switch (sfr.status()) {

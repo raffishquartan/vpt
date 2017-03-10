@@ -9,8 +9,7 @@ public class ConsoleWrapgenController {
   }
 
   public void run(final DirSourceFileProvider provider, final SourceFileProcessor sourceFileProcessor) {
-    new SourceFilePartitioner(provider).freshStreamOfAllSourceFiles()
-        .map(sourceFileProcessor::process)
+    new SourceFilePartitioner(provider).freshStreamOfAllSourceFiles().map(sourceFileProcessor::process)
         .forEach(SourceFileResultProcessor::process);
   }
 }
