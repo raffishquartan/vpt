@@ -14,15 +14,21 @@ public class ConsoleWrapgenMain {
   }
 
   public static void main(final String[] args) {
-    LOGGER.info("Execution started");
     try {
       final Configuration config = new Configuration(args);
-      new ConsoleWrapgenController().run(config, new DirSourceFileProvider(config.sourceDir()),
-          new SourceFileProcessor(config));
+      if(config.showHelp()) {
+        config.printHelp();
+      } else if(config.showVersion()) {
+        config.printVersion();
+      } else {
+        LOGGER.info("Execution started");
+        new ConsoleWrapgenController().run(new DirSourceFileProvider(config.sourceDir()),
+            new SourceFileProcessor(config));
+        LOGGER.info("Execution completed");
+      }
     } catch (final WrapgenRuntimeException e) {
       LOGGER.error("Aborting execution", e);
       System.exit(1);
     }
-    LOGGER.info("Execution completed");
   }
 }

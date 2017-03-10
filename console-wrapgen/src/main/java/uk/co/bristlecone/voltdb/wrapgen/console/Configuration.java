@@ -44,6 +44,8 @@ public class Configuration {
         destDir = null;
         packageBase = null;
         regexSuffix = null;
+        LOGGER.debug("Configuration loaded - showHelp:    {}", showHelp);
+        LOGGER.debug("Configuration loaded - showVersion: {}", showVersion);
       } else if(checkIfHelpOrVersion.hasOption("V")) {
         showHelp = false;
         showVersion = true;
@@ -51,6 +53,8 @@ public class Configuration {
         destDir = null;
         packageBase = null;
         regexSuffix = null;
+        LOGGER.debug("Configuration loaded - showHelp:    {}", showHelp);
+        LOGGER.debug("Configuration loaded - showVersion: {}", showVersion);
       } else {
         final CommandLine executionOptions = new DefaultParser().parse(getExecutionOptions(), commandLineArgs);
         showVersion = false;
