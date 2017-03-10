@@ -3,6 +3,7 @@ package uk.co.bristlecone.voltdb.wrapgen.console;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.console.impl.DirSourceFileProvider;
 
 public class ConsoleWrapgenMain {
@@ -14,8 +15,14 @@ public class ConsoleWrapgenMain {
 
   public static void main(final String[] args) {
     LOGGER.info("Execution started");
-    final Configuration config = new Configuration(args);
-    new ConsoleWrapgenController().run(new DirSourceFileProvider(config.sourceDir()), new SourceFileProcessor(config));
+    try {
+      final Configuration config = new Configuration(args);
+      new ConsoleWrapgenController().run(config, new DirSourceFileProvider(config.sourceDir()),
+          new SourceFileProcessor(config));
+    } catch (final WrapgenRuntimeException e) {
+      LOGGER.error("Aborting execution", e);
+      System.exit(1);
+    }
     LOGGER.info("Execution completed");
   }
 }

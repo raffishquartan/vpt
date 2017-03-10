@@ -23,6 +23,8 @@ public class ConfigurationTest {
       "--destination=someDestinationDir", "--packagebase=somePackageBase", "--regexsuffix=someRegex", "--foo=bar" };
   private static final String[] ARGS_WITH_MISSING_OPTION = new String[] { "--source=someSourceDir",
       "--destination=someDestinationDir", "--packagebase=somePackageBase" };
+  private static final String[] ARGS_WITH_HELP = new String[] { "--help", "--source=someSourceDir" };
+  private static final String[] ARGS_WITH_VERSION = new String[] { "--source=someSourceDir", "--version" };
 
   @Test
   public void sourceDirReturnsExpectedValue() {
@@ -45,8 +47,21 @@ public class ConfigurationTest {
   @Test
   public void regexSuffixReturnsExpectedValue() {
     final Configuration testee = new Configuration(ARGS_WITH_ALL_EXPECTED_OPTIONS);
-    assertThat(testee.regexSuffix()
-        .pattern(), is(equalTo(EXP_REGEX.pattern())));
+    assertThat(testee.regexSuffix().pattern(), is(equalTo(EXP_REGEX.pattern())));
+  }
+
+  @Test
+  public void showHelpIsSetIfHelpOptionIsSet() {
+    final Configuration testee = new Configuration(ARGS_WITH_HELP);
+    assertThat(testee.showHelp(), is(equalTo(true)));
+    assertThat(testee.showVersion(), is(equalTo(false)));
+  }
+
+  @Test
+  public void showVersionIsSetIfVersionOptionIsSet() {
+    final Configuration testee = new Configuration(ARGS_WITH_VERSION);
+    assertThat(testee.showVersion(), is(equalTo(true)));
+    assertThat(testee.showHelp(), is(equalTo(false)));
   }
 
   @Test(expected = WrapgenRuntimeException.class)
