@@ -1,3 +1,12 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
+def getCurrentTimestamp() {
+  Date today = new Date()
+  SimpleDateFormat df = new SimpleDateFormat ("yyyyMMdd:hhmmss")
+  return df.format(today)
+}
+
 allprojects {
   task wrapper(type: Wrapper) { gradleVersion = '3.2.1' }
 }

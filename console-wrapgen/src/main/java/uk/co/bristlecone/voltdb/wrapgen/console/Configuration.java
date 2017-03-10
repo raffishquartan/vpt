@@ -2,9 +2,11 @@ package uk.co.bristlecone.voltdb.wrapgen.console;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
@@ -25,6 +27,8 @@ import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
  * @author christo
  */
 public class Configuration {
+  private static final String CONFIG_FILENAME = "/config.properties";
+
   private static Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
 
   private final boolean showHelp;
@@ -82,7 +86,14 @@ public class Configuration {
   }
 
   public void printVersion() {
-    LOGGER.info("Requested version information: NOT-YET-IMPLEMENTED");
+    try {
+      final Properties p = new Properties();
+      p.load(getClass().getResourceAsStream(CONFIG_FILENAME));
+      LOGGER.info(String.format("Requested version information - project.version: %s", p.get("project.version")));
+      LOGGER.info(String.format("Requested version information - build.time:      %s", p.get("build.time")));
+    } catch (final IOException e) {
+      LOGGER.error("Error loading properties file", e);
+    }
   }
 
   private Options getHelpVersionOptions() {
