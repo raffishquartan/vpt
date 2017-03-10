@@ -8,15 +8,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
 import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
 import uk.co.bristlecone.voltdb.wrapgen.source.impl.JavaparserSourceFile;
 
 public class DirSourceFileProvider implements SourceFileProvider {
-  private Path rootDir;
+  private static final Logger LOGGER = LoggerFactory.getLogger(DirSourceFileProvider.class);
 
-  public DirSourceFileProvider(Path rootDir) {
+  private final Path rootDir;
+
+  public DirSourceFileProvider(final Path rootDir) {
+    LOGGER.info("Constructing DirSourceFileProvider for path: {}", rootDir);
     this.rootDir = rootDir;
     checkArgument(Files.isDirectory(rootDir), "rootDir must be a valid directory");
   }
@@ -24,11 +30,12 @@ public class DirSourceFileProvider implements SourceFileProvider {
   @Override
   public Stream<SourceFile> freshSourceFileStream() {
     try {
-      return Files.find(rootDir, 999, (p, bfa) -> p.getFileName()
-          .toString()
-          .matches(".*\\.java") && bfa.isRegularFile(), FileVisitOption.FOLLOW_LINKS)
+      LOGGER.info("Generating fresh source file stream");
+      return Files
+          .find(rootDir, 999, (p, bfa) -> p.getFileName().toString().matches(".*\\.java") && bfa.isRegularFile(),
+              FileVisitOption.FOLLOW_LINKS)
           .map(JavaparserSourceFile::make);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new WrapgenRuntimeException(String.format("Error finding files in %s", rootDir), e);
     }
   }

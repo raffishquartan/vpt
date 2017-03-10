@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -29,6 +32,8 @@ import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
  * @author christo
  */
 public class JavaparserSourceFile implements SourceFile {
+  private static Logger LOGGER = LoggerFactory.getLogger(JavaparserSourceFile.class);
+
   private final CompilationUnit ast;
   private final String filepath;
 
@@ -88,9 +93,8 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public String voltProcedureName() {
-    return getClassExtendingVoltProcedure().map(c -> c.getName())
-        .orElseThrow(
-            () -> new WrapgenRuntimeException(String.format("No VoltProcedure-extending type found in %s", filepath)));
+    return getClassExtendingVoltProcedure().map(c -> c.getName()).orElseThrow(
+        () -> new WrapgenRuntimeException(String.format("No VoltProcedure-extending type found in %s", filepath)));
   }
 
   /*
@@ -100,11 +104,8 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public List<RunParameter> runMethodParameters() {
-    return getRunMethod().map(m -> m.getParameters())
-        .map(pl -> pl.stream()
-            .map(JavaparserSourceFile::mapParam))
-        .map(s -> s.collect(Collectors.toList()))
-        .orElseThrow(() -> new WrapgenRuntimeException(
+    return getRunMethod().map(m -> m.getParameters()).map(pl -> pl.stream().map(JavaparserSourceFile::mapParam))
+        .map(s -> s.collect(Collectors.toList())).orElseThrow(() -> new WrapgenRuntimeException(
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
   }
 
@@ -127,9 +128,7 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public String packageName() {
-    return Optional.ofNullable(ast.getPackage())
-        .map(p -> p.getPackageName())
-        .orElse("");
+    return Optional.ofNullable(ast.getPackage()).map(p -> p.getPackageName()).orElse("");
   }
 
   /*
@@ -139,18 +138,15 @@ public class JavaparserSourceFile implements SourceFile {
    */
   @Override
   public String classJavaDoc() {
-    return getClassExtendingVoltProcedure().map(c -> c.getJavaDoc())
-        .map(jc -> jc.getContent())
-        .map(s -> s.replaceAll("\\n\\s\\*\\s", "\n"))
-        .orElse(SourceFile.NO_CLASS_JAVADOC_TEXT);
+    return getClassExtendingVoltProcedure().map(c -> c.getJavaDoc()).map(jc -> jc.getContent())
+        .map(s -> s.replaceAll("\\n\\s\\*\\s", "\n")).orElse(SourceFile.NO_CLASS_JAVADOC_TEXT);
   }
 
   /**
    * @return the <code>run</code> method's return type as Optional<String>
    */
   private Optional<String> getRunMethodReturnTypeAsString() {
-    return getRunMethod().map(m -> m.getType())
-        .map(t -> t.toString());
+    return getRunMethod().map(m -> m.getType()).map(t -> t.toString());
   }
 
   /**
@@ -160,13 +156,8 @@ public class JavaparserSourceFile implements SourceFile {
    */
   private Optional<ClassOrInterfaceDeclaration> getClassExtendingVoltProcedure() {
     final ClassOrInterfaceType voltProcedure = new ClassOrInterfaceType("VoltProcedure");
-    return ast.getTypes()
-        .stream()
-        .filter(d -> d instanceof ClassOrInterfaceDeclaration)
-        .map(d -> (ClassOrInterfaceDeclaration) d)
-        .filter(d -> d.getExtends()
-            .contains(voltProcedure))
-        .findFirst();
+    return ast.getTypes().stream().filter(d -> d instanceof ClassOrInterfaceDeclaration)
+        .map(d -> (ClassOrInterfaceDeclaration) d).filter(d -> d.getExtends().contains(voltProcedure)).findFirst();
   }
 
   /**
@@ -174,13 +165,12 @@ public class JavaparserSourceFile implements SourceFile {
    *         {@link JavaparserSourceFile#getClassExtendingVoltProcedure}
    */
   private Optional<MethodDeclaration> getRunMethod() {
-    return getClassExtendingVoltProcedure().flatMap(c -> c.getMethodsByName("run")
-        .stream()
-        .findFirst());
+    return getClassExtendingVoltProcedure().flatMap(c -> c.getMethodsByName("run").stream().findFirst());
   }
 
   public static JavaparserSourceFile make(final Path path) {
     try {
+      LOGGER.debug("Making JavaparserSourceFile instance from: {}", path);
       return new JavaparserSourceFile(JavaParser.parse(path), path.toString());
     } catch (final IOException e) {
       throw new WrapgenRuntimeException("Error creating JavaparserSourceFile object", e);
@@ -215,11 +205,7 @@ public class JavaparserSourceFile implements SourceFile {
     final CombinedTypeSolver cts = new CombinedTypeSolver();
     cts.add(new JreTypeSolver());
     final JavaParserFacade jpf = JavaParserFacade.get(cts);
-    final String fqcn = jpf.getType(param, false)
-        .asReferenceType()
-        .getTypeDeclaration()
-        .asClass()
-        .getQualifiedName();
+    final String fqcn = jpf.getType(param, false).asReferenceType().getTypeDeclaration().asClass().getQualifiedName();
     return fqcn.substring(0, fqcn.lastIndexOf("."));
   }
 
@@ -228,8 +214,7 @@ public class JavaparserSourceFile implements SourceFile {
    * @return the type of <code>param</code>, as a String
    */
   private static String parameterToTypeNameAsString(final Parameter param) {
-    return param.getType()
-        .toString();
+    return param.getType().toString();
   }
 
   /**
