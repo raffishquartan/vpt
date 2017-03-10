@@ -17,6 +17,7 @@ subprojects {
   dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'ch.qos.logback:logback-classic:1.2.1'
+    compile 'org.codehaus.groovy:groovy:2.4.9' // needed for use of logback.groovy instead of logback.xml
     
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
