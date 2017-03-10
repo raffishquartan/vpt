@@ -8,15 +8,9 @@ public class ConsoleWrapgenController {
     // intentionally empty
   }
 
-  public void run(final Configuration config, final DirSourceFileProvider provider,
-      final SourceFileProcessor sourceFileProcessor) {
-    if(config.showHelp()) {
-      config.printHelp();
-    } else if(config.showVersion()) {
+  public void run(final DirSourceFileProvider provider, final SourceFileProcessor sourceFileProcessor) {
 
-    } else {
-      new SourceFilePartitioner(provider).freshStreamOfAllSourceFiles().map(sourceFileProcessor::process)
-          .forEach(SourceFileResultProcessor::process);
-    }
+    new SourceFilePartitioner(provider).freshStreamOfAllSourceFiles().map(sourceFileProcessor::process)
+        .forEach(SourceFileResultProcessor::process);
   }
 }
