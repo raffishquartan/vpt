@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.*
 dependencies {
   compile 'com.google.guava:guava:20.0'
   compile 'commons-cli:commons-cli:1.3.1'
-  compile project(':wrapgen-core')
+  compile project(':vpt-core')
 }
 
 buildscript {
