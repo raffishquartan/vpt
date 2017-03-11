@@ -18,7 +18,7 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.WrapgenRuntimeException;
 
 /**
  * Represents the configuration of a console-wrapgen invocation. Constructed based on the command line arguments passed

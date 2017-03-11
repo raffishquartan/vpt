@@ -3,7 +3,7 @@ package uk.co.bristlecone.voltdb.wrapgen.console.impl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.WrapgenRuntimeException;
 
 /**
  * Responsible for converting procedure package names into runner package names. Runner package names will be the

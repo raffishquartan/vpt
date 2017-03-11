@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
-import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
-import uk.co.bristlecone.voltdb.wrapgen.source.impl.JavaparserSourceFile;
+import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.source.SourceFile;
+import uk.co.bristlecone.vpt.source.impl.JavaparserSourceFile;
 
 public class DirSourceFileProvider implements SourceFileProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(DirSourceFileProvider.class);

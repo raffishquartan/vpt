@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.stream.Stream;
 
 import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
-import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
+import uk.co.bristlecone.vpt.source.SourceFile;
 
 public class SourceFilePartitioner {
   SourceFileProvider sourceFiles;

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.WrapgenRuntimeException;
 
 public class ConfigurationTest {
   private static final Path EXP_SRC = Paths.get("src/main/java");

@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.console.impl.PackageNamer;
+import uk.co.bristlecone.vpt.WrapgenRuntimeException;
 
 public class PackageNamerTest {
   private static final String PACKAGE_BASE = "test.package.base.runner";
