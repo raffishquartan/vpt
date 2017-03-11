@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.console;
+package uk.co.bristlecone.vpt.runner.console;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

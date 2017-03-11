@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.console;
+package uk.co.bristlecone.vpt.runner.console;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

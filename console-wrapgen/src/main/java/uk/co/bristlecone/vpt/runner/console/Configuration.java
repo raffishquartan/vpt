@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.console;
+package uk.co.bristlecone.vpt.runner.console;
 
 import static com.google.common.base.Preconditions.checkArgument;
 

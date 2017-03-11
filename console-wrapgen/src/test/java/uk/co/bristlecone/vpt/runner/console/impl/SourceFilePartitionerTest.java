@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.console.impl;
+package uk.co.bristlecone.vpt.runner.console.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
-import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
+import uk.co.bristlecone.vpt.runner.console.SourceFileProvider;
 import uk.co.bristlecone.vpt.source.SourceFile;
 
 @RunWith(JMockit.class)
