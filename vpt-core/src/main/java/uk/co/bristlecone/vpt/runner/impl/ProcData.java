@@ -11,7 +11,7 @@ import uk.co.bristlecone.vpt.source.RunParameter;
 import uk.co.bristlecone.vpt.source.SourceFile;
 
 /**
- * An immutable class representing the metadata needed to build a wrapgen runner
+ * An immutable class representing the metadata needed to build a vpt-runner-builder
  *
  * @author christo
  */

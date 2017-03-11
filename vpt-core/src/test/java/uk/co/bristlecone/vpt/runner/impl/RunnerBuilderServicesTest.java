@@ -42,7 +42,7 @@ public class RunnerBuilderServicesTest {
       + PROC_DATA_CLASS_JAVADOC
       + "</blockquote>\n\n"
       + "<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n"
-      + "@author voltdb-wrapgen\n";
+      + "@author vpt-runner-builder\n";
   // @formatter:on
 
   @Test

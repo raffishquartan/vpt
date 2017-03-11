@@ -42,7 +42,7 @@ public class RunnerBuilderTest {
       + String.format(" *\n")
       + String.format(" * <strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n")
       + String.format(" *\n")
-      + String.format(" * @author voltdb-wrapgen\n")
+      + String.format(" * @author vpt-runner-builder\n")
       + String.format(" */\n")
       + String.format("@VoltRunner\n")
       + String.format("public class %s {\n", PROC_DATA_CLASS_NAME)
