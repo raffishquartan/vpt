@@ -62,7 +62,7 @@ public class RunnerBuilder {
     return MethodSpec.methodBuilder("runWithTimeout").addJavadoc(rbs.runnerRunMethodJavaDoc())
         .addParameter(Client.class, "client", Modifier.FINAL).addParameter(Duration.class, "timeout", Modifier.FINAL)
         .addParameters(rbs.runMethodParamsAsParameterSpecs()).addException(NoConnectionsException.class)
-        .addException(IOException.class).returns(runnerRunReturnType())
+        .addAnnotation(Deprecated.class).addException(IOException.class).returns(runnerRunReturnType())
         .addStatement("$T result = new $T()", runnerRunReturnType(), runnerRunReturnType())
         .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, VptUtil.class)
         .addStatement("client.callProcedure($L)", callProcedureWithTimeoutParamsAsVariableList("timeout"))
