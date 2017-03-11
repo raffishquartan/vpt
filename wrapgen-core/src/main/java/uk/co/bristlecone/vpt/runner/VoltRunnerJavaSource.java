@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 /**
  * Represents the source code for a single VoltRunner, e.g. as returned by a RunnerBuilder. NB: The source code provided
@@ -30,7 +30,7 @@ public class VoltRunnerJavaSource {
 
   /**
    * @return the fully qualified class name, e.g. com.companyname.packagename.VoltRunnerName
-   * @throws WrapgenRuntimeException in some cases if the runner source does not specify a valid runner class
+   * @throws VptRuntimeException in some cases if the runner source does not specify a valid runner class
    */
   public String fullyQualifiedClassName() {
     final String packageName = extractPackageNameFromSource();
@@ -40,7 +40,7 @@ public class VoltRunnerJavaSource {
 
   /**
    * @return the fully qualified class filepath, e.g. com/companyname/packagename/VoltRunnerName.java
-   * @throws WrapgenRuntimeException in some cases if the runner source does not specify a valid runner class
+   * @throws VptRuntimeException in some cases if the runner source does not specify a valid runner class
    */
   public String fullyQualifiedClassFilePath() {
     return fullyQualifiedClassName().replace('.', File.separatorChar) + ".java";
@@ -51,14 +51,13 @@ public class VoltRunnerJavaSource {
     final Matcher m = p.matcher(source);
     m.find();
     return Optional.ofNullable(m.group(1))
-        .orElseThrow(() -> new WrapgenRuntimeException("No @VoltRunner public class found in VoltRunnerJavaSource"));
+        .orElseThrow(() -> new VptRuntimeException("No @VoltRunner public class found in VoltRunnerJavaSource"));
   }
 
   private String extractPackageNameFromSource() {
     final Pattern p = Pattern.compile("package\\s+(\\w+(\\.\\w+)*);", Pattern.MULTILINE);
     final Matcher m = p.matcher(source);
     m.find();
-    return Optional.ofNullable(m.group(1))
-        .orElse(""); // default package
+    return Optional.ofNullable(m.group(1)).orElse(""); // default package
   }
 }

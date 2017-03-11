@@ -17,7 +17,6 @@ import com.squareup.javapoet.ParameterSpec;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
-import uk.co.bristlecone.vpt.runner.ProcData;
 import uk.co.bristlecone.vpt.source.RunParameterClass;
 import uk.co.bristlecone.vpt.source.RunParameterPrimitive;
 

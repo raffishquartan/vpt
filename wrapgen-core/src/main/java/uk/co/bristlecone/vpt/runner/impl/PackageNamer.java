@@ -1,9 +1,9 @@
-package uk.co.bristlecone.vpt.runner.console.impl;
+package uk.co.bristlecone.vpt.runner.impl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 /**
  * Responsible for converting procedure package names into runner package names. Runner package names will be the
@@ -32,7 +32,7 @@ public class PackageNamer {
   public String getPackage(final String procPackage) {
     final Matcher suffixMatcher = regexSuffix.matcher(procPackage);
     if(!suffixMatcher.matches()) {
-      throw new WrapgenRuntimeException(String.format("%s failed to match proc package %s", regexSuffix, procPackage));
+      throw new VptRuntimeException(String.format("%s failed to match proc package %s", regexSuffix, procPackage));
     }
     ;
     return String.format("%s.%s", packageBase, suffixMatcher.group(1));

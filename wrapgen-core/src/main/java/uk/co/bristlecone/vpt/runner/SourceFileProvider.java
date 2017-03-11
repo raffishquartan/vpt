@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner.console;
+package uk.co.bristlecone.vpt.runner;
 
 import java.util.stream.Stream;
 

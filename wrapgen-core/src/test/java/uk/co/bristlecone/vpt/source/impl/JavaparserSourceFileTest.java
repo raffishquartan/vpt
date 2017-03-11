@@ -14,7 +14,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.google.common.collect.ImmutableList;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 import uk.co.bristlecone.vpt.source.ProcReturnType;
 import uk.co.bristlecone.vpt.source.RunParameter;
 import uk.co.bristlecone.vpt.source.RunParameterClass;
@@ -106,21 +106,21 @@ public class JavaparserSourceFileTest {
     assertThat(testeeWithoutPackage.packageName(), is(equalTo("")));
   }
 
-  @Test(expected = WrapgenRuntimeException.class)
+  @Test(expected = VptRuntimeException.class)
   public void classWithInvalidExtendsThrowsOnGettingProcedureName() {
     final CompilationUnit testAst = JavaParser.parse(CLASS_INCORRECT_SUPERCLASS);
     final JavaparserSourceFile testee = new JavaparserSourceFile(testAst, "dummy-test-ast");
     testee.voltProcedureName();
   }
 
-  @Test(expected = WrapgenRuntimeException.class)
+  @Test(expected = VptRuntimeException.class)
   public void classWithNoRunMethodThrowsOnGettingParameters() {
     final CompilationUnit testAst = JavaParser.parse(CLASS_NO_RUN_METHOD);
     final JavaparserSourceFile testee = new JavaparserSourceFile(testAst, "dummy-test-ast");
     testee.runMethodParameters();
   }
 
-  @Test(expected = WrapgenRuntimeException.class)
+  @Test(expected = VptRuntimeException.class)
   public void classWithInvalidRunMethodReturnTypeThrowsOnGettingRunReturnType() {
     final CompilationUnit testAst = JavaParser.parse(CLASS_INVALID_RUN_METHOD_RETURN_TYPE);
     final JavaparserSourceFile testee = new JavaparserSourceFile(testAst, "dummy-test-ast");

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterSpec;
 
-import uk.co.bristlecone.vpt.runner.ProcData;
 import uk.co.bristlecone.vpt.source.RunParameter;
 import uk.co.bristlecone.vpt.source.RunParameterClass;
 import uk.co.bristlecone.vpt.source.RunParameterPrimitive;

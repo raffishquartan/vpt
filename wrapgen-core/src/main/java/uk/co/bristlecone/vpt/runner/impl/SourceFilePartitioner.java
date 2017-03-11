@@ -1,12 +1,18 @@
-package uk.co.bristlecone.vpt.runner.console.impl;
+package uk.co.bristlecone.vpt.runner.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.stream.Stream;
 
-import uk.co.bristlecone.vpt.runner.console.SourceFileProvider;
+import uk.co.bristlecone.vpt.runner.SourceFileProvider;
 import uk.co.bristlecone.vpt.source.SourceFile;
 
+/**
+ * Used to generate streams (from the {@link SourceFileProvider} passed to the constructor) of valid-, invalid-, non-
+ * and all source files.
+ *
+ * @author christo
+ */
 public class SourceFilePartitioner {
   SourceFileProvider sourceFiles;
 
