@@ -1,2 +1,3 @@
+include "vpt-lib"
 include "vpt-core"
 include "console-runner-builder"

@@ -5,5 +5,4 @@ dependencies {
   compile 'org.apache.commons:commons-lang3:3.5'
   compile 'org.voltdb:voltdbclient:6.4'    
   compile 'org.voltdb:voltdb:6.4'
-  compile project(':vpt-lib')
 }
