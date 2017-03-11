@@ -42,21 +42,11 @@ public class JavaparserSourceFile implements SourceFile {
     this.filepath = filepath;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#identifier()
-   */
   @Override
   public String identifier() {
     return filepath;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#isValidVoltProcedure()
-   */
   @Override
   public boolean isValidVoltProcedure() {
     final Optional<ClassOrInterfaceDeclaration> storedProc = getClassExtendingVoltProcedure();
@@ -86,22 +76,12 @@ public class JavaparserSourceFile implements SourceFile {
     return getClassExtendingVoltProcedure().isPresent();
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#voltProcedureName()
-   */
   @Override
   public String voltProcedureName() {
     return getClassExtendingVoltProcedure().map(c -> c.getName()).orElseThrow(
         () -> new VptRuntimeException(String.format("No VoltProcedure-extending type found in %s", filepath)));
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#runMethodParameters()
-   */
   @Override
   public List<RunParameter> runMethodParameters() {
     return getRunMethod().map(m -> m.getParameters()).map(pl -> pl.stream().map(JavaparserSourceFile::mapParam))
@@ -109,11 +89,6 @@ public class JavaparserSourceFile implements SourceFile {
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#runMethodReturnType()
-   */
   @Override
   public ProcReturnType runMethodReturnType() {
     return getRunMethodReturnTypeAsString().map(ProcReturnType::parseJavaType)
@@ -121,21 +96,11 @@ public class JavaparserSourceFile implements SourceFile {
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#packageName()
-   */
   @Override
   public String packageName() {
     return Optional.ofNullable(ast.getPackage()).map(p -> p.getPackageName()).orElse("");
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see uk.co.bristlecone.voltdb.wrapgen.source.SourceFile#classJavaDoc()
-   */
   @Override
   public String classJavaDoc() {
     return getClassExtendingVoltProcedure().map(c -> c.getJavaDoc()).map(jc -> jc.getContent())

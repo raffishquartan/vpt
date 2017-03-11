@@ -22,8 +22,8 @@ import uk.co.bristlecone.vpt.VptRuntimeException;
 import uk.co.bristlecone.vpt.runner.impl.Configuration;
 
 /**
- * Represents the configuration of a console-wrapgen invocation. Constructed based on the command line arguments passed
- * to the tool.
+ * Represents the configuration of a console-runner-builder invocation. Constructed based on the command line arguments
+ * passed to the tool.
  *
  * @author christo
  */

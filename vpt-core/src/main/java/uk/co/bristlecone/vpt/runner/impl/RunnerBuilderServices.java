@@ -53,7 +53,7 @@ public class RunnerBuilderServices {
     result.append(procData.classJavaDoc());
     result.append("</blockquote>\n\n");
     result.append("<strong>This class is automatically generated. Manual edits will be overwritten.</strong>\n\n");
-    result.append("@author voltdb-wrapgen\n");
+    result.append("@author vpt-runner-builder\n");
     return result.toString();
   }
 
@@ -79,29 +79,22 @@ public class RunnerBuilderServices {
    * manual dispatch :/
    */
   public List<ParameterSpec> runMethodParamsAsParameterSpecs() {
-    return procData.parameters()
-        .stream()
-        .map(RunnerBuilderServices::runParameterToParameterSpecBuilder)
-        .map(psb -> psb.build())
-        .collect(Collectors.toList());
+    return procData.parameters().stream().map(RunnerBuilderServices::runParameterToParameterSpecBuilder)
+        .map(psb -> psb.build()).collect(Collectors.toList());
   }
 
   /**
    * @return the parameters to the stored procedure's run method as a comma-separated list of variable names
    */
   public String runMethodParamsAsVariableList() {
-    return procData.parameters()
-        .stream()
-        .map(rp -> rp.variableName())
-        .collect(Collectors.joining(", "));
+    return procData.parameters().stream().map(rp -> rp.variableName()).collect(Collectors.joining(", "));
   }
 
   /**
    * @return the number of parameters to the stored procedure's run() method
    */
   public int runMethodNumberOfParams() {
-    return procData.parameters()
-        .size();
+    return procData.parameters().size();
   }
 
   /**
