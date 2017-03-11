@@ -3,8 +3,8 @@ package uk.co.bristlecone.voltdb.wrapgen.console;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.voltdb.wrapgen.WrapgenRuntimeException;
 import uk.co.bristlecone.voltdb.wrapgen.console.impl.DirSourceFileProvider;
+import uk.co.bristlecone.vpt.WrapgenRuntimeException;
 
 public class ConsoleWrapgenMain {
   private static Logger LOGGER = LoggerFactory.getLogger(ConsoleWrapgenMain.class);

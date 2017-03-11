@@ -11,12 +11,12 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.voltdb.wrapgen.builder.ProcData;
-import uk.co.bristlecone.voltdb.wrapgen.builder.RunnerBuilder;
-import uk.co.bristlecone.voltdb.wrapgen.builder.VoltRunnerJavaSource;
 import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileResult.Result;
 import uk.co.bristlecone.voltdb.wrapgen.console.impl.PackageNamer;
-import uk.co.bristlecone.voltdb.wrapgen.source.SourceFile;
+import uk.co.bristlecone.vpt.runner.ProcData;
+import uk.co.bristlecone.vpt.runner.RunnerBuilder;
+import uk.co.bristlecone.vpt.runner.VoltRunnerJavaSource;
+import uk.co.bristlecone.vpt.source.SourceFile;
 
 /**
  * @see {@link SourceFileProcessor#process} for the SRP of this class.
