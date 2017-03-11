@@ -1,10 +1,10 @@
-package uk.co.bristlecone.voltdb.wrapgen.console;
+package uk.co.bristlecone.vpt.runner.console;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.voltdb.wrapgen.console.impl.DirSourceFileProvider;
 import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.runner.console.impl.DirSourceFileProvider;
 
 public class ConsoleWrapgenMain {
   private static Logger LOGGER = LoggerFactory.getLogger(ConsoleWrapgenMain.class);

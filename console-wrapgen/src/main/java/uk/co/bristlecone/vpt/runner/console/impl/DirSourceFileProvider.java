@@ -1,4 +1,4 @@
-package uk.co.bristlecone.voltdb.wrapgen.console.impl;
+package uk.co.bristlecone.vpt.runner.console.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.voltdb.wrapgen.console.SourceFileProvider;
 import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.runner.console.SourceFileProvider;
 import uk.co.bristlecone.vpt.source.SourceFile;
 import uk.co.bristlecone.vpt.source.impl.JavaparserSourceFile;
 

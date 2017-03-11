@@ -1,7 +1,7 @@
-package uk.co.bristlecone.voltdb.wrapgen.console;
+package uk.co.bristlecone.vpt.runner.console;
 
-import uk.co.bristlecone.voltdb.wrapgen.console.impl.DirSourceFileProvider;
-import uk.co.bristlecone.voltdb.wrapgen.console.impl.SourceFilePartitioner;
+import uk.co.bristlecone.vpt.runner.console.impl.DirSourceFileProvider;
+import uk.co.bristlecone.vpt.runner.console.impl.SourceFilePartitioner;
 
 public class ConsoleWrapgenController {
   public ConsoleWrapgenController() {
