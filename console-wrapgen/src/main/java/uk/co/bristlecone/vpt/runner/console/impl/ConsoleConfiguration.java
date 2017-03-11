@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner.console;
+package uk.co.bristlecone.vpt.runner.console.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -18,7 +18,8 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
+import uk.co.bristlecone.vpt.runner.impl.Configuration;
 
 /**
  * Represents the configuration of a console-wrapgen invocation. Constructed based on the command line arguments passed
@@ -26,10 +27,10 @@ import uk.co.bristlecone.vpt.WrapgenRuntimeException;
  *
  * @author christo
  */
-public class Configuration {
+public class ConsoleConfiguration implements Configuration {
   private static final String CONFIG_FILENAME = "/config.properties";
 
-  private static Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(ConsoleConfiguration.class);
 
   private final boolean showHelp;
   private final boolean showVersion;
@@ -38,7 +39,7 @@ public class Configuration {
   private final String packageBase;
   private final Pattern regexSuffix;
 
-  public Configuration(final String[] commandLineArgs) {
+  public ConsoleConfiguration(final String[] commandLineArgs) {
     try {
       final CommandLine checkIfHelpOrVersion = new DefaultParser().parse(getHelpVersionOptions(), commandLineArgs);
       if(checkIfHelpOrVersion.hasOption("h")) {
@@ -76,7 +77,7 @@ public class Configuration {
       }
     } catch (final ParseException e) {
       printHelp();
-      throw new WrapgenRuntimeException(e);
+      throw new VptRuntimeException(e);
     }
   }
 
@@ -125,18 +126,34 @@ public class Configuration {
     return showVersion;
   }
 
+  /* (non-Javadoc)
+   * @see uk.co.bristlecone.vpt.runner.console.Configuration#sourceDir()
+   */
+  @Override
   public Path sourceDir() {
     return sourceDir;
   }
 
+  /* (non-Javadoc)
+   * @see uk.co.bristlecone.vpt.runner.console.Configuration#destDir()
+   */
+  @Override
   public Path destDir() {
     return destDir;
   }
 
+  /* (non-Javadoc)
+   * @see uk.co.bristlecone.vpt.runner.console.Configuration#packageBase()
+   */
+  @Override
   public String packageBase() {
     return packageBase;
   }
 
+  /* (non-Javadoc)
+   * @see uk.co.bristlecone.vpt.runner.console.Configuration#regexSuffix()
+   */
+  @Override
   public Pattern regexSuffix() {
     return regexSuffix;
   }

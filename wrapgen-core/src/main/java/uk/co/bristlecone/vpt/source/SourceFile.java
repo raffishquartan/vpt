@@ -3,11 +3,11 @@ package uk.co.bristlecone.vpt.source;
 import java.util.List;
 
 import uk.co.bristlecone.vpt.VoltRunner;
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 /**
  * Represents a Java source file and provides accessor methods for extracting metadata needed to build a
- * {@link VoltRunner}. These accessor methods may throw a {@link WrapgenRuntimeException} if the associated Java source
+ * {@link VoltRunner}. These accessor methods may throw a {@link VptRuntimeException} if the associated Java source
  * does not contain a valid VoltDB stored procedure, so the {@link SourceFile#isValidVoltProcedure} method should be
  * used to guard against this.
  *
@@ -39,28 +39,28 @@ public interface SourceFile {
 
   /**
    * @return the name of the VoltDB stored procedure in this source file; does not return an Optional but throws a
-   *         {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
+   *         {@link VptRuntimeException} if the associated Java source does not contain a valid VoltDB stored
    *         procedure
    */
   String voltProcedureName();
 
   /**
    * @return the parameters to the VoltDB stored procedure's run method; does not return an Optional but throws a
-   *         {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
+   *         {@link VptRuntimeException} if the associated Java source does not contain a valid VoltDB stored
    *         procedure
    */
   List<RunParameter> runMethodParameters();
 
   /**
    * @return the return type of the VoltDB stored procedure in this source file; does not return an Optional but throws
-   *         a {@link WrapgenRuntimeException} if the associated Java source does not contain a valid VoltDB stored
+   *         a {@link VptRuntimeException} if the associated Java source does not contain a valid VoltDB stored
    *         procedure
    */
   ProcReturnType runMethodReturnType();
 
   /**
    * @return the name of the package the VoltDB stored procedure is in; returns the empty String ("") for the default
-   *         package; does not return an Optional but throws a {@link WrapgenRuntimeException} if the associated Java
+   *         package; does not return an Optional but throws a {@link VptRuntimeException} if the associated Java
    *         source does not contain a valid VoltDB stored procedure
    */
   String packageName();

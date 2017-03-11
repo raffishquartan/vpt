@@ -19,7 +19,8 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import uk.co.bristlecone.vpt.VoltRunner;
-import uk.co.bristlecone.vpt.WrapgenUtil;
+import uk.co.bristlecone.vpt.VptUtil;
+import uk.co.bristlecone.vpt.runner.impl.ProcData;
 import uk.co.bristlecone.vpt.runner.impl.RunnerBuilderServices;
 
 /**
@@ -36,15 +37,10 @@ public class RunnerBuilder {
   }
 
   public VoltRunnerJavaSource build() {
-    final TypeSpec runnerClassBuilder = TypeSpec.classBuilder(rbs.runnerName())
-        .addModifiers(Modifier.PUBLIC)
-        .addAnnotation(VoltRunner.class)
-        .addJavadoc(rbs.runnerJavaDoc())
-        .addMethod(buildRunMethodSpec())
-        .addMethod(buildRunWithTimeoutMethodSpec())
-        .build();
-    final JavaFile fileBuilder = JavaFile.builder(rbs.runnerPackageName(), runnerClassBuilder)
-        .build();
+    final TypeSpec runnerClassBuilder = TypeSpec.classBuilder(rbs.runnerName()).addModifiers(Modifier.PUBLIC)
+        .addAnnotation(VoltRunner.class).addJavadoc(rbs.runnerJavaDoc()).addMethod(buildRunMethodSpec())
+        .addMethod(buildRunWithTimeoutMethodSpec()).build();
+    final JavaFile fileBuilder = JavaFile.builder(rbs.runnerPackageName(), runnerClassBuilder).build();
     return new VoltRunnerJavaSource(fileBuilder.toString());
   }
 
@@ -53,34 +49,24 @@ public class RunnerBuilder {
   }
 
   private MethodSpec buildRunMethodSpec() {
-    return MethodSpec.methodBuilder("run")
-        .addJavadoc(rbs.runnerRunMethodJavaDoc())
-        .addParameter(Client.class, "client", Modifier.FINAL)
-        .addParameters(rbs.runMethodParamsAsParameterSpecs())
-        .addException(NoConnectionsException.class)
-        .addException(IOException.class)
-        .returns(runnerRunReturnType())
+    return MethodSpec.methodBuilder("run").addJavadoc(rbs.runnerRunMethodJavaDoc())
+        .addParameter(Client.class, "client", Modifier.FINAL).addParameters(rbs.runMethodParamsAsParameterSpecs())
+        .addException(NoConnectionsException.class).addException(IOException.class).returns(runnerRunReturnType())
         .addStatement("$T result = new $T()", runnerRunReturnType(), runnerRunReturnType())
-        .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, WrapgenUtil.class)
-        .addStatement("client.callProcedure($L)", callProcedureParamsAsVariableList())
-        .addStatement("return result")
+        .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, VptUtil.class)
+        .addStatement("client.callProcedure($L)", callProcedureParamsAsVariableList()).addStatement("return result")
         .build();
   }
 
   private MethodSpec buildRunWithTimeoutMethodSpec() {
-    return MethodSpec.methodBuilder("runWithTimeout")
-        .addJavadoc(rbs.runnerRunMethodJavaDoc())
-        .addParameter(Client.class, "client", Modifier.FINAL)
-        .addParameter(Duration.class, "timeout", Modifier.FINAL)
-        .addParameters(rbs.runMethodParamsAsParameterSpecs())
-        .addException(NoConnectionsException.class)
-        .addException(IOException.class)
-        .returns(runnerRunReturnType())
+    return MethodSpec.methodBuilder("runWithTimeout").addJavadoc(rbs.runnerRunMethodJavaDoc())
+        .addParameter(Client.class, "client", Modifier.FINAL).addParameter(Duration.class, "timeout", Modifier.FINAL)
+        .addParameters(rbs.runMethodParamsAsParameterSpecs()).addException(NoConnectionsException.class)
+        .addException(IOException.class).returns(runnerRunReturnType())
         .addStatement("$T result = new $T()", runnerRunReturnType(), runnerRunReturnType())
-        .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, WrapgenUtil.class)
+        .addStatement("$T handler = $T.getHandler(result)", ProcedureCallback.class, VptUtil.class)
         .addStatement("client.callProcedure($L)", callProcedureWithTimeoutParamsAsVariableList("timeout"))
-        .addStatement("return result")
-        .build();
+        .addStatement("return result").build();
   }
 
   private String callProcedureParamsAsVariableList() {

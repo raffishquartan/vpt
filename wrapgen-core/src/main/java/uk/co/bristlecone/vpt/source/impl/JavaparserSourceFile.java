@@ -19,7 +19,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 import uk.co.bristlecone.vpt.source.ProcReturnType;
 import uk.co.bristlecone.vpt.source.RunParameter;
 import uk.co.bristlecone.vpt.source.RunParameterClass;
@@ -94,7 +94,7 @@ public class JavaparserSourceFile implements SourceFile {
   @Override
   public String voltProcedureName() {
     return getClassExtendingVoltProcedure().map(c -> c.getName()).orElseThrow(
-        () -> new WrapgenRuntimeException(String.format("No VoltProcedure-extending type found in %s", filepath)));
+        () -> new VptRuntimeException(String.format("No VoltProcedure-extending type found in %s", filepath)));
   }
 
   /*
@@ -105,7 +105,7 @@ public class JavaparserSourceFile implements SourceFile {
   @Override
   public List<RunParameter> runMethodParameters() {
     return getRunMethod().map(m -> m.getParameters()).map(pl -> pl.stream().map(JavaparserSourceFile::mapParam))
-        .map(s -> s.collect(Collectors.toList())).orElseThrow(() -> new WrapgenRuntimeException(
+        .map(s -> s.collect(Collectors.toList())).orElseThrow(() -> new VptRuntimeException(
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
   }
 
@@ -117,7 +117,7 @@ public class JavaparserSourceFile implements SourceFile {
   @Override
   public ProcReturnType runMethodReturnType() {
     return getRunMethodReturnTypeAsString().map(ProcReturnType::parseJavaType)
-        .orElseThrow(() -> new WrapgenRuntimeException(
+        .orElseThrow(() -> new VptRuntimeException(
             String.format("Either no VoltProcedure-extending type found in %s, or no run method defined", filepath)));
   }
 
@@ -173,7 +173,7 @@ public class JavaparserSourceFile implements SourceFile {
       LOGGER.debug("Making JavaparserSourceFile instance from: {}", path);
       return new JavaparserSourceFile(JavaParser.parse(path), path.toString());
     } catch (final IOException e) {
-      throw new WrapgenRuntimeException("Error creating JavaparserSourceFile object", e);
+      throw new VptRuntimeException("Error creating JavaparserSourceFile object", e);
     }
   }
 

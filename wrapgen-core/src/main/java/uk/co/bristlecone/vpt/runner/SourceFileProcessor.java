@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner.console;
+package uk.co.bristlecone.vpt.runner;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,11 +11,10 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.vpt.runner.ProcData;
-import uk.co.bristlecone.vpt.runner.RunnerBuilder;
-import uk.co.bristlecone.vpt.runner.VoltRunnerJavaSource;
-import uk.co.bristlecone.vpt.runner.console.SourceFileResult.Result;
-import uk.co.bristlecone.vpt.runner.console.impl.PackageNamer;
+import uk.co.bristlecone.vpt.runner.SourceFileResult.Result;
+import uk.co.bristlecone.vpt.runner.impl.Configuration;
+import uk.co.bristlecone.vpt.runner.impl.PackageNamer;
+import uk.co.bristlecone.vpt.runner.impl.ProcData;
 import uk.co.bristlecone.vpt.source.SourceFile;
 
 /**

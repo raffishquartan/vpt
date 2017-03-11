@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 /**
  * Represents a primitive parameter (e.g. <code>int foo</code>) to a stored procedure.
@@ -94,7 +94,7 @@ public class RunParameterPrimitive implements RunParameter {
     case "double":
       return double.class;
     default:
-      throw new WrapgenRuntimeException(String.format("Unknown type in RunParameterPrimitive: %s", typeName()));
+      throw new VptRuntimeException(String.format("Unknown type in RunParameterPrimitive: %s", typeName()));
     }
   }
 

@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
-import uk.co.bristlecone.vpt.runner.console.SourceFileProvider;
+import uk.co.bristlecone.vpt.VptRuntimeException;
+import uk.co.bristlecone.vpt.runner.SourceFileProvider;
 import uk.co.bristlecone.vpt.source.SourceFile;
 import uk.co.bristlecone.vpt.source.impl.JavaparserSourceFile;
 
@@ -36,7 +36,7 @@ public class DirSourceFileProvider implements SourceFileProvider {
               FileVisitOption.FOLLOW_LINKS)
           .map(JavaparserSourceFile::make);
     } catch (final IOException e) {
-      throw new WrapgenRuntimeException(String.format("Error finding files in %s", rootDir), e);
+      throw new VptRuntimeException(String.format("Error finding files in %s", rootDir), e);
     }
   }
 }

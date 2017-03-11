@@ -7,12 +7,12 @@ import org.voltdb.client.ClientResponse;
 import org.voltdb.client.ProcedureCallback;
 
 /**
- * A collection of static utility methods
- * 
+ * A collection of static utility methods for VPT tools and users
+ *
  * @author christo
  */
-public class WrapgenUtil {
-  private WrapgenUtil() {
+public class VptUtil {
+  private VptUtil() {
     // private to hide
   }
 

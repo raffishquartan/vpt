@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner.console;
+package uk.co.bristlecone.vpt.runner;
 
 public class SourceFileResult {
   public static enum Result {

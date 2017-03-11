@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner;
+package uk.co.bristlecone.vpt.runner.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 

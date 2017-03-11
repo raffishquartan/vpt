@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner;
+package uk.co.bristlecone.vpt.runner.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import uk.co.bristlecone.vpt.runner.impl.ProcData;
 import uk.co.bristlecone.vpt.source.ProcReturnType;
 import uk.co.bristlecone.vpt.source.RunParameter;
 import uk.co.bristlecone.vpt.source.RunParameterClass;

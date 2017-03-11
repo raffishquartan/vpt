@@ -1,6 +1,6 @@
 package uk.co.bristlecone.vpt.source;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 /**
  * Represents the types that may be returned by a VoltDB stored procedure's run method. See the VoltDB documentation for
@@ -52,7 +52,7 @@ public enum ProcReturnType {
     case "VoltTable[]":
       return ProcReturnType.VOLTABLE_ARRAY;
     default:
-      throw new WrapgenRuntimeException(String.format("Invalid stored procedure return type %s", type));
+      throw new VptRuntimeException(String.format("Invalid stored procedure return type %s", type));
     }
   }
 }

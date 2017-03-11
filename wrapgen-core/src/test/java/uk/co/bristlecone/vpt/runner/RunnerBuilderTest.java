@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
+import uk.co.bristlecone.vpt.runner.impl.ProcData;
 
 @RunWith(JMockit.class)
 public class RunnerBuilderTest {
@@ -31,7 +32,7 @@ public class RunnerBuilderTest {
       + String.format("import org.voltdb.client.NoConnectionsException;\n")
       + String.format("import org.voltdb.client.ProcedureCallback;\n")
       + String.format("import uk.co.bristlecone.vpt.VoltRunner;\n")
-      + String.format("import uk.co.bristlecone.vpt.WrapgenUtil;\n")
+      + String.format("import uk.co.bristlecone.vpt.VptUtil;\n")
       + String.format("\n")
       + String.format("/**\n")
       + String.format(" * An instance of this class can be used to run the <code>%s</code> ", PROC_DATA_CLASS_NAME)
@@ -59,7 +60,7 @@ public class RunnerBuilderTest {
       + String.format("  CompletableFuture<ClientResponse> run(final Client client)\n")
       + String.format("      throws NoConnectionsException, IOException {\n")
       + String.format("    CompletableFuture<ClientResponse> result = new CompletableFuture<ClientResponse>();\n")
-      + String.format("    ProcedureCallback handler = WrapgenUtil.getHandler(result);\n")
+      + String.format("    ProcedureCallback handler = VptUtil.getHandler(result);\n")
       + String.format("    client.callProcedure(handler, \"%s\");\n", PROC_DATA_CLASS_NAME)
       + String.format("    return result;\n")
       + String.format("  }\n")
@@ -78,7 +79,7 @@ public class RunnerBuilderTest {
       + String.format("  CompletableFuture<ClientResponse> runWithTimeout(final Client client, final Duration timeout)\n")
       + String.format("      throws NoConnectionsException, IOException {\n")
       + String.format("    CompletableFuture<ClientResponse> result = new CompletableFuture<ClientResponse>();\n")
-      + String.format("    ProcedureCallback handler = WrapgenUtil.getHandler(result);\n")
+      + String.format("    ProcedureCallback handler = VptUtil.getHandler(result);\n")
       + String.format("    client.callProcedure(handler, Math.toIntExact(timeout.toMillis()), \"%s\");\n", PROC_DATA_CLASS_NAME)
       + String.format("    return result;\n")
       + String.format("  }\n")

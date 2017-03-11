@@ -25,7 +25,7 @@ processResources {
 jar {
   manifest {
     attributes(
-      'Main-Class': 'uk.co.bristlecone.voltdb.wrapgen.console.ConsoleWrapgenMain'
+      'Main-Class': 'uk.co.bristlecone.vpt.runner.console.ConsoleWrapgenMain'
     )
   }
 }

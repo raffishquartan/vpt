@@ -1,4 +1,4 @@
-package uk.co.bristlecone.vpt.runner.console.impl;
+package uk.co.bristlecone.vpt.runner.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 public class PackageNamerTest {
   private static final String PACKAGE_BASE = "test.package.base.runner";
@@ -21,7 +21,7 @@ public class PackageNamerTest {
     assertThat(testee.getPackage("test.package.base.voltdb.backup"), is(equalTo("test.package.base.runner.backup")));
   }
 
-  @Test(expected = WrapgenRuntimeException.class)
+  @Test(expected = VptRuntimeException.class)
   public void getPackageThrowsIfProcPackageDoesntMatchRegexSuffix() {
     final PackageNamer testee = new PackageNamer(PACKAGE_BASE, REGEX_SUFFIX);
     testee.getPackage("this.package.doesnt.match");

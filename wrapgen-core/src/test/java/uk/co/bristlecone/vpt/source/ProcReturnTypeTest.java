@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
-import uk.co.bristlecone.vpt.WrapgenRuntimeException;
+import uk.co.bristlecone.vpt.VptRuntimeException;
 
 public class ProcReturnTypeTest {
   @Test
@@ -31,7 +31,7 @@ public class ProcReturnTypeTest {
     assertThat(ProcReturnType.parseJavaType("VoltTable[]"), is(equalTo(ProcReturnType.VOLTABLE_ARRAY)));
   }
 
-  @Test(expected = WrapgenRuntimeException.class)
+  @Test(expected = VptRuntimeException.class)
   public void parseJavaTypeThrowsOnUnknownType() {
     ProcReturnType.parseJavaType("InvalidType");
   }
