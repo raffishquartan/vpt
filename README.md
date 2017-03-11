@@ -1,12 +1,32 @@
-# VoltDB WrapGen
+# VoltProcTools
 
-tl;dr: Use WrapGen for safe, statically-typed invocation of VoltDB stored procedures.
+VoltDB is great and it's stored procedures are even better. But distributed systems [can be hard](https://qualocustech.wordpress.com/2016/09/28/whos-afraid-of-the-big-bad-distributed-wolf/). VPT is a collection of tools that might make a developer's life in a distributed world just a little bit easier.  
 
-## The problem with client-first stored procedure invocation
+## More on: vpt-lib
 
-VoltDB is great. VoltDB stored procedures are great. But VoltDB stored procedures are executed using a client-first API with varargs and dynamic typing. So it's all too easy to make mistakes that are only detected at run time.
+This library of common classes and utilities should be made available as a dependency at compile-time and run-time to client applications that use VPT (e.g. runners from runner-builders). It is not needed if the client application does not use VPT tools at run-time.
 
-What do I mean? Well, here's a stored procedure definition:
+## More on: vpt-core
+
+This library of common classes and utilities is used internally by VPT tools.
+
+## More on: voltlint
+
+Some linting is done by the runner-builder's, but more could be done and it should all be decoupled from runner-building. Coming soon!
+
+## More on: runner-builder's
+
+tl;dr: Use a runner-builder for safe, statically-typed, IDE-friendly invocation of VoltDB stored procedures 
+
+### The problem with client-first stored procedure invocation
+
+VoltDB stored procedures are executed using a client-first API with varargs and no static typing. This means there isn't much IDE support.
+
+For example, stored procedure names are string constants, not types, and there's no static checking of arguments at the point of invocation.
+
+This makes development slower and code harder to test. Bugs are discovered later at greater cost. This is a general problem bemoaned by dev's everywhere - JDBC I'm looking at you - but that doesn't mean it should be ignored.
+
+For example, here's a VoltDB stored procedure definition:
 
 ````java
 public class MyStoredProcedure extends VoltProcedure {
@@ -22,100 +42,127 @@ And here's me executing it in my application:
 client.callProcedure("MyStoredProcedure", 0L, "that data I talked about");
 ````
 
-This will fail when executed. The problem is simple: I've transposed argOne and argTwo. But no errors or warnings are raised on compilation. My unit tests will all pass. So will my integration tests, which do correctly invoke the stored procedure. It is not until this code is run against a live database, perhaps in production itself, that this error will be discovered. Sad face.
+This will compile without errors because `callProcedure` takes an `Object...` for the parameters, but it will fail when executed because I've transposed argOne and argTwo. If argOne and argTwo had compatible types the problem could be worse: corrupted data, a lurking cancer that would cause a catastrophe sometime in the future. 
 
-There are also many other errors I could have made, and these would also fail to generate compile-time errors or warnings. I could mistype the stored procedure's name at invocation ("MyStoredProecdure"). I could specify an invalid return type to the run function, or I could specify an invalid parameter (javac will compile anything, but VoltDB will only allow [a few types](https://docs.voltdb.com/UsingVoltDB/DesignProcAnatomy.php#DesignPassArgs) as arguments to stored procedures).
+I might discover this problem during integration testing (there are some great tools for Linux and Mac dev's [here](https://github.com/VoltDB/app-debug-and-test)), but if this procedure invocation was buried in an obscure code path or my testing was poor then there's a good chance it will only appear in production. Sad face.
 
-And of course there's no code completion of vararg methods in any IDE so even just writing the code which uses the stored procedure is more painful than it needs to be.
+This is one type of error. There are many others. I could mistype the stored procedure's name at invocation ("MyStoredProecdure"). I could specify an invalid return type to the run function, or I could specify a parameter type not passable to a VoltDB stored procedure. See [here](https://docs.voltdb.com/UsingVoltDB/DesignProcAnatomy.php#DesignPassArgs) for more and [here](https://qualocustech.wordpress.com/2017/02/02/voltdb-how-to-write-high-performance-stored-procedures-that-work-the-checklist/) for some of the other errors.
 
-## A solution: Procedure-first stored procedure invocation
+### A solution: Linting + procedure-first stored procedure invocation
 
-WrapGen generates wrappers, one per stored procedure class, that are procedure-first and not client-first. Compare:
-
-````java
-CompletableFuture<ClientResponse> = MyStoredProcedure.run(client, "that data I talked about", 0L);
-````
-
-With:
+A runner-builder walks your code base and generates stored procedure runners, one per stored procedure. These runners have an API that is procedure-first and not client-first. Compare the old:
 
 ````java
 // synchronous - ugh
 ClientResponse response = client.callProcedure("MyStoredProcedure", "that data", 0L);
 
-// asynchronous, but callbacks - ugh
+// asynchronous, but no use of types - ugh
 ClientResponse response = client.callProcedure(someCallbackDefinedElsewhere, "MyStoredProcedure", "that data", 0L);
 ````
 
-Because there is one class per stored procedure, avoiding type errors in the parameters and typos in the stored procedure name is automatic, and code completion is a doddle. Does WrapGen solve all the world's problems? No. But it is a first step in making VoltDB even easier to use. See the issues, future features and road map for next steps :)
+With the new:
 
-## But code generation is smelly
+````java
+MyStoredProcedure mspProc = new MyStoredProcedure();
+CompletableFuture<ClientResponse> = mspProc.run(client, "that data I talked about", 0L);
+````
+Because there is now one class per stored procedure, type errors in the parameters and typos in the stored procedure name are automatically avoided and code completion is a doddle. The runner classes can be injected, or created on demand, they have no fields so construction is cheap and fast.
 
-Yes, it can be. But so are run time errors in production. Smellier even.
+Stored procedure definitions are also linted during generation and some (soon: more) other errors are identified then.
 
-There's an important point here though: WrapGen is intended for use in environments where DB correctness is critical. The "smelliness" of code generation ultimately comes down to two factors:
+Does doing this solve all the world's problems? No. But it's a first step in making VoltDB even easier to use. See the issues, future features and road map for next steps :)
 
-- It adds complexity (additional build steps)
-- It's tempting to manually modify the generated code,  
+### But code generation is smelly
 
-WrapGen tries to work around these two issues:
+Yes, it can be. But so are database errors in production.
 
-- By making it as easy and as safe as possible to generate the runners. Ultimately, whether you do it on the console, in your IDE or at build time, the same code will be generated
- - That means you can generate it in Eclipse and in your build process, which also eliminates the risk of manual modifications making it into production
- - In the future, WrapGen will backup the code and warn when the generated code is different to any code being overwritten, so you also won't lose them
-- Making the runners very simple. You give it the parameters, it gives you a future for the ClientResponse. You do whatever you like with it
+There's an important point here though: vpt's runner-builder tools are intended for use where DB correctness and avoiding runtime errors is critical, your requirements might be different and it might not be appropriate for you.
 
-Also it's [bad practice](https://docs.voltdb.com/UsingVoltDB/DesignAppAsync.php#DesignAppAsynCallback) to do complex computation in a VoltDB stored procedure or its callback. That said, WrapGen might not be right for your needs. Feedback and discussion is very welcome :)
+Ultimately, the "smelliness" of code generation comes down to a couple of factors:
 
-## Building WrapGen
+- It adds complexity
+  - generated code isn't available in the IDE
+  - additional build steps
+- It's tempting to manually modify the generated code
+  - Manual modifications get lost
+  - If it needs modification you might as well write it from scratch
 
-WrapGen is built using gradle: `./gradlew build`
+vpt and the runner-builder roadmap tries to work around these two issues:
 
-Important note: WrapGen depends on the VoltDB client library, which is not available in any public repo. If it is not already present in your local repo you will need to install it before you can build WrapGen: 
+- By making runner creation consistent across multiple tools
+  - The output will be the same whether they are built in the IDE, by Maven or Gradle or a command line tool
+- By flagging, not silently overwriting, differences
+  - console-runner-builder backs up any existing files it finds, instead of just overwriting them
+  - future versions will diff files, backup existing files as needed and prominently warn the developer
+- By making the runner's configurable
+  - allow automatic annotation of the runner with JEE annotations
+  - use annotations of the stored procedure to specify which distributed execution patterns should be used (e.g. [run-everywhere](https://dzone.com/articles/voltdb-beyond-multi-partition))
+- By making the runners very simple, reducing the need for modification that isn't configurable
+  - You give the runners the parameters, it gives you a CompletableFuture for the ClientResponse, you do whatever you like with it
+  - Doing as little as possible during stored procedure execution is also VoltDB [best practice](https://docs.voltdb.com/UsingVoltDB/DesignAppAsync.php#DesignAppAsynCallback)
+  
+Input and discussion is very welcome, please raise an issue if you have any questions :)
 
-`mvn install:install-file -Dfile=/path/to/voltdb-x.y.z.jar -DgroupId=org.voltdb -DartifactId=voltdb -Dversion=5.8.1 -Dpackaging=jar`
+### console-runner-builder usage
 
-NB: WrapGen is written using Java 8 but generates Java 7-source code.
-
-## console-wrapgen Usage
-
-**To be finalised as development is completed**
-
-console-wrapgen takes four command line arguments. All of them must be specified and no others are allowed:
-- `-s`, `--source` - The root directory to crawl recursively for Java files, builders will be created for any valid VoltDB procedure found
-- `-d`, `--destination` - The root directory to write the results to (package folders will be created under this as needed)
-- `-p`, `--packagebase` - explained jointly below
-- `-r`, `--regexsuffix` - explained jointly below
+When building runner's, console-runner-builder requires four command line arguments:
+- `-s`, `--source` - The root directory to crawl recursively for valid procedures, builders will be created for each one found
+- `-d`, `--destination` - The root directory to (runner package folders will be created under this)
+- `-p`, `--packagebase` - explained with regexsuffix in the following paragraph
+- `-r`, `--regexsuffix` - explained with packagebase in the following paragraph
 
 The root of each runner's package will be the `--packagebase`, e.g.: `--packagebase=voltdb.myrunners`. The regex suffix is then applied to the stored procedure's package and the first matching group is appended to the package base.
 
-For example, if the VoltDB stored procedure MyStoredProcedure class was defined in the package  `uk.co.bristlecone.voltdb.datamanip` and `--regexsuffix=uk.co.bristlecone.voltdb.datamanip.(.*)` then the runner's fully qualified classname would be `voltdb.myrunners.datamanip.MyStoredProcedure`. Remember to escape globbing characters in the command line parameter.
+For example, if the VoltDB stored procedure MyStoredProcedure class was defined in the package  `uk.co.bristlecone.voltdb.datamanip.foo.bar` and `--regexsuffix=uk.co.bristlecone.voltdb.datamanip.(.*)` then the runner's fully qualified classname would be `voltdb.myrunners.datamanip.foo.bar.MyStoredProcedure`. Remember to escape globbing characters in the regexsuffix command line parameter.
 
-If the suffix regex does not match then the runner is placed in `--packagebase`. Runner names clashing in this situation is not handled specially. 
+If regexsuffix does not match the procedure's package name then an error is raised.
 
-## WrapGen Issues and Future Features
+console-runner-builder also accepts the `--version` and `--help` options.
 
+### How do I use runner's in my application?
+
+1. Execute console-runner-builder against the code base
+2. Add vpt-lib as a dependency
+3. ???
+4. Profit 
+
+### console-runner-builder, vpt-core issues and future features
+
+- Only make backup copies of an existing file if it is different to the generated runner
 - Create runners for indirect subclasses of VoltProcedure (need to use java-symbol-solver here)
 - Stored procedures defined in a nested class haven't been tested and probably won't be correctly parsed
-- Enable the automatic annotation of runners with dependency injection annotations
-- Enable generation of singleton runners (and make runner generation more configurable)
-- Group source files into "is", "is not" and "maybe" contain stored procedure's, for clearer logging
-- Make backup copies and log loudly if any file being overwritten is different to the generated code (manual modification warnings) 
-- Build runners that use the run-everywhere pattern for appropriate stored procedures...
-- ...with customisable, per-`ClientResponseWithPartitionKey`, join strategies
-- Add WrapGenClientInterface, replicating VoltDB's and overload runners to allow either to be used (lets you define a custom client, e.g. with more logging)  
-- Add some ClientResponse helper methods
+- Enable the automatic annotation of runners with dependency injection annotations (`@Inject` etc)
+- Enable generation of singleton runners (make runner generation more configurable in general)
+- Use the run-everywhere execution pattern in runners for configuration-specified stored procedures ...
+- ... with customisable, per-`ClientResponseWithPartitionKey`, join strategies
+- Add WrapGenClientInterface, replicating VoltDB's and overload runners to allow either to be used
+  - This would let you define a custom client, e.g. with profiling, more logging or a custom thread pool
+- Add new run method to runner's
+  - runAndIgnoreResult (to be the equivalent of VDB's NullCallback)
+  - runWithCallback (accepts a ProcedureCallback implementation and applies it to the ClientResponse future, to better support transitioning of existing code)
+- Allow custom prefix and suffix to runner names (instead of just using the procedure name)
+
+## Building vpt
+
+The VPT tools are built using gradle: `./gradlew build`
+
+Important note: VPT depends on the VoltDB client library, which is not available in any public repo. If it is not already present in your local repo you will need to install it before you can build VPT: 
+
+`mvn install:install-file -Dfile=/path/to/voltdb-x.y.z.jar -DgroupId=org.voltdb -DartifactId=voltdb -Dversion=x.y.z -Dpackaging=jar`
+
+## VPT roadmap
+
+- An independent tool to check stored procedure's for correctness: voltlint
+  - vpt-core does some for runner-builder's already, but more could be done - e.g. detect non-final `SQLStmt's`, use of non-final statics, ... 
+  - Linting should be decoupled from runner-building 
+- Address the remaining console-runner-builder issues (in vpt-core) 
+- gradle-runner-builder plugin
+- maven-runner-builder plugin
+- eclipse-runner-builder plugin
+- intellij-runner-builder plugin
+- Add some ClientResponse helper methods to make working with stored procedure results a little easier
   - E.g. for getting the string value of any column without manually specifying its type
-
-## Roadmap
-
-- Address the above issues and implement those future features
-- gradle-wrapgen plugin
-- maven-wrapgen plugin
-- eclipse-wrapgen plugin
-- intellij-wrapgen plugin
-- An independent tool to check stored procedure's for correctness: VoltLint
-  - Do smarter linting here to detect more issues - non-final `SQLStmt's`, use of non-final statics, ...
 
 ## Changelog
 
-- 0.0.1 - first released version - wrapgen-core, console-wrapgen - **NOT YET RELEASED, COMING SOON**
+- 0.0.1 - first released version of vpt - vpt-lib, vpt-core, console-runner-builder
