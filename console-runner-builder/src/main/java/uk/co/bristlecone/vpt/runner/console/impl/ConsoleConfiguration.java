@@ -83,13 +83,14 @@ public class ConsoleConfiguration implements Configuration {
 
   public void printHelp() {
     final HelpFormatter help = new HelpFormatter();
-    help.printHelp("console-wrapgen", getExecutionOptions());
+    help.printHelp("console-runner-builder", getExecutionOptions());
   }
 
   public void printVersion() {
     try {
       final Properties p = new Properties();
       p.load(getClass().getResourceAsStream(CONFIG_FILENAME));
+      LOGGER.info("Properties loaded: {}", p.keySet());
       LOGGER.info(String.format("Requested version information - project.version: %s", p.get("project.version")));
       LOGGER.info(String.format("Requested version information - build.time:      %s", p.get("build.time")));
     } catch (final IOException e) {
@@ -126,7 +127,9 @@ public class ConsoleConfiguration implements Configuration {
     return showVersion;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see uk.co.bristlecone.vpt.runner.console.Configuration#sourceDir()
    */
   @Override
@@ -134,7 +137,9 @@ public class ConsoleConfiguration implements Configuration {
     return sourceDir;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see uk.co.bristlecone.vpt.runner.console.Configuration#destDir()
    */
   @Override
@@ -142,7 +147,9 @@ public class ConsoleConfiguration implements Configuration {
     return destDir;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see uk.co.bristlecone.vpt.runner.console.Configuration#packageBase()
    */
   @Override
@@ -150,7 +157,9 @@ public class ConsoleConfiguration implements Configuration {
     return packageBase;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see uk.co.bristlecone.vpt.runner.console.Configuration#regexSuffix()
    */
   @Override
