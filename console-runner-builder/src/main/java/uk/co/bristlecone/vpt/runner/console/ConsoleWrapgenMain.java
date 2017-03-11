@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.bristlecone.vpt.VptRuntimeException;
 import uk.co.bristlecone.vpt.runner.SourceFileProcessor;
+import uk.co.bristlecone.vpt.runner.SourceFileResultProcessor;
 import uk.co.bristlecone.vpt.runner.console.impl.ConsoleConfiguration;
 import uk.co.bristlecone.vpt.runner.console.impl.DirSourceFileProvider;
 
@@ -25,7 +26,7 @@ public class ConsoleWrapgenMain {
       } else {
         LOGGER.info("Execution started");
         new ConsoleWrapgenController().run(new DirSourceFileProvider(config.sourceDir()),
-            new SourceFileProcessor(config));
+            new SourceFileProcessor(config), new SourceFileResultProcessor());
         LOGGER.info("Execution completed");
       }
     } catch (final VptRuntimeException e) {
