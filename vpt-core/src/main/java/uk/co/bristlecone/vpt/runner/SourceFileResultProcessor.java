@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class SourceFileResultProcessor {
   private static final Logger LOGGER = LoggerFactory.getLogger(SourceFileResultProcessor.class);
 
-  public static void process(final SourceFileResult sfr) {
+  public void process(final SourceFileResult sfr) {
     switch (sfr.status()) {
     case NOT_A_PROC:
       LOGGER.info(String.format("%s - not a VoltDB stored procedure, ignored", sfr.identifier()));
