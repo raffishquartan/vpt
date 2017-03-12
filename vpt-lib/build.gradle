@@ -1,0 +1,8 @@
+dependencies {
+  compile 'com.google.guava:guava:20.0'
+  compile 'com.squareup:javapoet:1.8.0'
+  compile 'me.tomassetti:java-symbol-solver-core:0.3.1'
+  compile 'org.apache.commons:commons-lang3:3.5'
+  compile 'org.voltdb:voltdbclient:6.4'    
+  compile 'org.voltdb:voltdb:6.4'
+}
