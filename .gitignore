@@ -84,7 +84,7 @@ hs_err_pid*
 
 ### Gradle ###
 .gradle
-/build/
+build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -97,3 +97,6 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# Other files I want to ignore
+logs/
